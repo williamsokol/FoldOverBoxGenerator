@@ -103,11 +103,11 @@ function makeSide(x,y){
     for(var i=0;i<lenList.length;i++){
         
         let size = lenList[i]/tabLength;
-        let tabCount = Math.floor(size/2.0)
-        //console.log(tabCount)
+        let tabCount = getTabCount(lenList[i])
         for(var j=0;j<tabCount;j++){
-            let tabPos = (lenList[i]*(j/tabCount))+xcord-(tabLength/2)+lenList[i]/(tabCount*2)
-            var tab = new Path.Rectangle(new Point(tabPos,y-thickness),new Size(tabLength,thickness*2+height));
+            let tabPos = j*(lenList[i]/tabCount) + (lenList[i]/tabCount)/2 
+            console.log("side: " + tabPos)
+            var tab = new Path.Rectangle(new Point(tabPos+xcord,y-thickness),new Size(tabLength,thickness*2+height));
             path = path.unite(tab)
         }
 
@@ -131,10 +131,11 @@ function makeTabs(shapePath,lenList, trueLenList=lenList, tabDense=2.0)
     let tabPos = 0;
     let sideOffset = 0
     for(var i=0;i<lenList.length;i++){
-        let tabCount = Math.floor(((lenList[i]-tabLength)/tabDense)/tabLength)
+        let tabCount = getTabCount(lenList[i])
         for(var j=0;j<tabCount;j++){
             var tab = new Path.Rectangle(new Point(0,0),new Size(tabLength,thickness));
-            tabPos = j*(lenList[i]/tabCount) + (lenList[i]/tabCount)/2 + sideOffset + (trueLenList[i]-lenList[i])/2
+            tabPos = j*(lenList[i]/tabCount) + (lenList[i]/tabCount)/2 + sideOffset 
+            console.log("lid: " + tabPos)
             var offsetPoint = shapePath.getPointAt(tabPos)
             var tan = shapePath.getTangentAt(tabPos); 
             tab.position = offsetPoint
@@ -209,5 +210,10 @@ var downloadAsSVG = function (fileName) {
     link.download = fileName;
     link.href = url;
     link.click();
+ }
+
+ function getTabCount(len, tabDense = 2.0)
+ {
+    return Math.floor(((len-tabLength)/tabDense)/tabLength)
  }
 window.process = process;
