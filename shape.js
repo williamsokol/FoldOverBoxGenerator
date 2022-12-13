@@ -83,14 +83,21 @@ function makeLid(x,y){
     
     path.position = new Point(x+length/2,y+width/2)
     
+    var tabs = makeTabs(path.children[0],path.children[0].length)
+    
+    var tabs2 = makeTabs(path.children[1],path.children[1].length)
+    // tabs2.strokeColor="#00ff00"
+    
+    // make connected path
     var connectedPath = path.unite(path)
     path.remove()
-    var tabs = makeTabs(connectedPath,lenList)
-
+    
+    //dialate path to be bigger
     var temp = connectedPath;
     connectedPath = PaperOffset.offset(connectedPath, 7, { join: 'round' })
     temp.remove()
 
+    tabs = tabs.unite(tabs2)
     connectedPath = connectedPath.subtract(tabs)
 
 }
@@ -100,54 +107,51 @@ function makeSide(x,y){
     
     //let lenList = [length-(thickness*2),width,length -(thickness*2),width]
     let xcord = x;
-    for(var i=0;i<lenList.length;i++){
-        
-        let size = lenList[i]/tabLength;
-        let tabCount = getTabCount(lenList[i])
-        for(var j=0;j<tabCount;j++){
-            let tabPos = j*(lenList[i]/tabCount) + (lenList[i]/tabCount)/2 
-            console.log("side: " + tabPos)
-            var tab = new Path.Rectangle(new Point(tabPos+xcord,y-thickness),new Size(tabLength,thickness*2+height));
-            path = path.unite(tab)
-        }
+    
+    // tabs around box
+    let tabs = new Path();
+    tabs = tabs.unite(makeTabs(path, lenList[0], height,thickness/2))
+    tabs = tabs.unite(makeTabs(path, lenList[0], 2*height+perimeter+lenList[1],-thickness/2))
+    tabs = tabs.unite(makeTabs(path, lenList[1], height+lenList[0],thickness/2))
+    tabs = tabs.unite(makeTabs(path, lenList[1], 2*height+perimeter,-thickness/2))
+    // tabs.strokeColor="#ff0000"
 
-        if(i%2 == 0){
-            makeLivingHinge(xcord,y-thickness,lenList[i]-3,height+y)
-        }
-        
-        xcord += lenList[i]
-        var path2 = new Path.Line(new Point(xcord,y), new Point(xcord,height+y));
-        path2.strokeColor = '#000000';
-        
-    }
+    path = path.unite(tabs)
+
+
+    makeLivingHinge(xcord,y-thickness,lenList[0]-3,height+y)
+    var path2 = new Path.Line(new Point(x+lenList[0],y), new Point(x+lenList[0],height+y));
+    path2.strokeColor = '#000000';
+
+
     path.strokeColor = '#000000';
 }
-function makeTabs(shapePath,lenList, trueLenList=lenList, tabDense=2.0)
+function makeTabs(shapePath,length, start=0, dist=0)
 {
-    var tabPath = new Path()
-    
-    //var trueLenList = [60/*,length,width,length*/]
-    //let lenList = [300/*,length-(thickness*2),width,length*/]
-    let tabPos = 0;
-    let sideOffset = 0
-    for(var i=0;i<lenList.length;i++){
-        let tabCount = getTabCount(lenList[i])
-        for(var j=0;j<tabCount;j++){
-            var tab = new Path.Rectangle(new Point(0,0),new Size(tabLength,thickness));
-            tabPos = j*(lenList[i]/tabCount) + (lenList[i]/tabCount)/2 + sideOffset 
-            console.log("lid: " + tabPos)
-            var offsetPoint = shapePath.getPointAt(tabPos)
-            var tan = shapePath.getTangentAt(tabPos); 
-            tab.position = offsetPoint
-            tab.rotate(tan.angle, offsetPoint);
-            
-            // console.log("test: " + tabCount +" "+ j)
-            tabPath = tabPath.unite(tab)
-        }
-        sideOffset += trueLenList[i]
+    if(dist != 0){
+        // shapePath
+        PaperOffset.offset(shapePath, 7, { join: 'round' })
     }
-    //tabPath.tabCount = tabCount
-    // tabPath.strokeColor = '#000ff0';
+
+    var tabPath = new Path()
+
+    let tabPos = 0;
+    
+    let tabCount = getTabCount(length)
+    for(var j=0;j<tabCount;j++){
+        var tab = new Path.Rectangle(new Point(0,0),new Size(tabLength,thickness));
+        tabPos = j*(length/tabCount) + (length/tabCount)/2 + start
+        var offsetPoint = shapePath.getPointAt(tabPos)
+        var tan = shapePath.getTangentAt(tabPos); 
+        let norm = shapePath.getNormalAt(tabPos)
+
+        tab.position = offsetPoint + (norm*dist)
+        tab.rotate(tan.angle, offsetPoint);
+        
+        // console.log("test: " + tabCount +" "+ j)
+        tabPath = tabPath.unite(tab)
+    }
+    // tabPath.strokeColor = "#00ff00"
     return tabPath;
 }
 function makeLivingHinge(x,y,w,h)
