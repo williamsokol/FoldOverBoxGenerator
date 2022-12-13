@@ -8,26 +8,7 @@ const svg =
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
-  <sodipodi:namedview
-     id="namedview72514"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:document-units="mm"
-     showgrid="false"
-     inkscape:zoom="0.49085999"
-     inkscape:cx="-153.81168"
-     inkscape:cy="215.94753"
-     inkscape:window-width="1366"
-     inkscape:window-height="705"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
+  
   <defs
      id="defs72509" />
   <g
@@ -83,14 +64,17 @@ function makeLid(x,y){
     
     path.position = new Point(x+length/2,y+width/2)
     
-    var tabs = makeTabs(path.children[0],path.children[0].length)
+    var tabs = makeTabs(path.children[0],path.children[0].length+tabLength)
+    //make specail lid system here:
+    let thing = Path.Circle(path.children[0].getPointAt(path.children[0].length-.5),Math.hypot(thickness,tabLength)/2)
+    thing.strokeColor = "#00000"
     
-    var tabs2 = makeTabs(path.children[1],path.children[1].length)
+    var tabs2 = makeTabs(path.children[1],path.children[1].length-10,10)
     // tabs2.strokeColor="#00ff00"
     
     // make connected path
     var connectedPath = path.unite(path)
-    path.remove()
+    // path.remove()
     
     //dialate path to be bigger
     var temp = connectedPath;
@@ -112,6 +96,8 @@ function makeSide(x,y){
     let tabs = new Path();
     tabs = tabs.unite(makeTabs(path, lenList[0], height,thickness/2))
     tabs = tabs.unite(makeTabs(path, lenList[0], 2*height+perimeter+lenList[1],-thickness/2))
+
+    // 2nd pair of tabs
     tabs = tabs.unite(makeTabs(path, lenList[1], height+lenList[0],thickness/2))
     tabs = tabs.unite(makeTabs(path, lenList[1], 2*height+perimeter,-thickness/2))
     // tabs.strokeColor="#ff0000"
