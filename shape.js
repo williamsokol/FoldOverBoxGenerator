@@ -32,10 +32,10 @@ customSVG.strokeColor= null
 const thickness = 4.8
 var Dthick = thickness*2
 const tabLength = 10
-const width = 100
-const length = 120
+const width = 130
+const length = 140
 
-const height = 50
+const height = 60
 const cornerSize = new Size(30, 30);
 
 let rectangle1 = new Rectangle(new Point(0,0),new Size(length,width));
@@ -59,9 +59,10 @@ makeSide(10+thickness,10)
 // process()
 
 function makeLid(x,y){
+    test = new Path.Rectangle(new Point(x,y+width-20),new Size(95,20))
+    test.strokeColor="#ff0000"
+    var path = customSVG.clone()
     
-    var path = customSVG.clone()//new Path.Rectangle(rectangle1, cornerSize);
-    // path.strokeColor = '#000000';
     
     path.position = new Point(x+length/2,y+width/2)
     
@@ -70,7 +71,7 @@ function makeLid(x,y){
     lidIndent = PaperOffset.offset(lidIndent, thickness/2, { join: 'round' })
     let refer  = new Path(path.children[0].segments)
     refer = PaperOffset.offset(refer, 7, { join: 'round' })
-    lidIndent.insert(0,refer.getPointAt(refer.length-5))
+    lidIndent.insert(0,refer.getPointAt(refer.length-4))
     lidIndent.segments.unshift(new Segment(lidIndent.bounds.topRight))
     
     // create the tabs
@@ -117,8 +118,12 @@ function makeSide(x,y){
     let pannel1 = new Path.Rectangle(new Point(xcord,y),new Size(lenList[0],height));
     let tabs = new Path();
     tabs = tabs.unite(makeTabs(pannel1, lenList[0], height,thickness/2))
-    tabs = tabs.unite(makeTabs(pannel1, lenList[0], 2*height+lenList[0],-thickness/2))
+    tabs = tabs.unite(makeTabs(pannel1, lenList[0], 2*height+lenList[0],thickness/2))
+    
+    let lidDent = (makeTabs(pannel1, height/2, (height+lenList[0])+height/4,-thickness/2))
+    
     pannel1 = pannel1.unite(tabs)
+    pannel1 = pannel1.subtract(lidDent)
     
     let p = pannel1.bounds
     makeLivingHinge(p.x, p.y, (p.width-12), p.height)
@@ -126,24 +131,28 @@ function makeSide(x,y){
 
     xcord += lenList[0]+ 10
 
-    let offset = 3.5
+    let offset = 6
     let pannel2 = new Path.Rectangle(new Point(xcord,y),new Size(lenList[1]+offset,height));
     let tabs2 = new Path();
-    tabs2 = tabs2.unite(makeTabs(pannel2, lenList[1]+10, height,thickness/2))
-    tabs2 = tabs2.unite(makeTabs(pannel2, lenList[1]+10, 2*height+lenList[1]+(2*offset-10),-thickness/2))
-    pannel2 = pannel2.unite(tabs2)
-  
-    let p2 = pannel2.bounds
-    makeLivingHinge(p2.x, p2.y, (p2.width-12), p2.height)
-    pannel2.strokeColor="#000000"
+    tabs2 = tabs2.unite(makeTabs(pannel2, lenList[1]+10, height+3,thickness/2))
+    tabs2 = tabs2.unite(makeTabs(pannel2, lenList[1]+10, 2*height+lenList[1]+(2*offset-10)-3,thickness/2))
+    
+    let lidTab = (makeTabs(pannel2, height/2, height/4,+thickness/2))
 
+    pannel2 = pannel2.unite(tabs2)
+    let p2 = pannel2.bounds
+    makeLivingHinge(p2.x+1, p2.y, (p2.width-12), p2.height)
+    pannel2 = pannel2.unite(lidTab)
+    
+    pannel2.strokeColor="#000000"
+    
     xcord += lenList[1]+ 10
 
     offset = 6
     let pannel3 = new Path.Rectangle(new Point(xcord,y),new Size(lenList[2]-offset,height));
     let tabs3 = new Path();
-    tabs3 = tabs3.unite(makeTabs(pannel3, lenList[2]-10, height+10,thickness/2))
-    tabs3 = tabs3.unite(makeTabs(pannel3, lenList[2]-10, 2*height+lenList[2]-(2*offset),-thickness/2))
+    tabs3 = tabs3.unite(makeTabs(pannel3, lenList[2]-10, (height),thickness/2))
+    tabs3 = tabs3.unite(makeTabs(pannel3, lenList[2]-10,2*height+lenList[2]-(2*offset-10),thickness/2))
     pannel3 = pannel3.unite(tabs3)
     
 
@@ -153,10 +162,7 @@ function makeSide(x,y){
 }
 function makeTabs(shapePath,length, start=0, dist=0)
 {
-    if(dist != 0){
-        // shapePath
-        PaperOffset.offset(shapePath, 7, { join: 'round' })
-    }
+
 
     var tabPath = new Path()
 
@@ -170,10 +176,10 @@ function makeTabs(shapePath,length, start=0, dist=0)
         var tan = shapePath.getTangentAt(tabPos); 
         let norm = shapePath.getNormalAt(tabPos)
 
+        tab.rotate(tan.angle/*, offsetPoint*/);
         tab.position = offsetPoint + (norm*dist)
-        tab.rotate(tan.angle, offsetPoint);
         
-        // console.log("test: " + tabCount +" "+ j)
+        // console.log("test: " + norm*dist +" "+ j)
         tabPath = tabPath.unite(tab)
     }
     // tabPath.strokeColor = "#00ff00"
@@ -182,6 +188,9 @@ function makeTabs(shapePath,length, start=0, dist=0)
 function makeLivingHinge(x,y,w,h)
 {
     const spacing = 3,line = 17,gap = 7;
+
+    x += spacing
+    w -= spacing
     
     // let a = new Path.Rectangle(new Point(x,y),new Size(w,h))
     // a.strokeColor = "#000000"
