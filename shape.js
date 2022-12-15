@@ -65,25 +65,18 @@ function makeLid(x,y){
     
     path.position = new Point(x+length/2,y+width/2)
     
-    //testing
-    let thing  = new Path(path.children[1].segments)
-    thing = PaperOffset.offset(thing, thickness/2, { join: 'round' })
-    // thing.visible = true;
+    //indent to free lid tabs
+    let lidIndent  = new Path(path.children[1].segments)
+    lidIndent = PaperOffset.offset(lidIndent, thickness/2, { join: 'round' })
     let refer  = new Path(path.children[0].segments)
     refer = PaperOffset.offset(refer, 7, { join: 'round' })
-    thing.insert(0,refer.getPointAt(refer.length-5))
-    console.log(thing.segments + " "+thing.segments.length)
-    thing.segments.unshift(new Segment(thing.bounds.topRight))
-    // thing.smooth({from:2,to:3})
-
-    console.log(thing.segments + " "+thing.segments.length)
-    // thing.strokeColor="#00ff00"
-    // thing.
-    // thing.closePath()
-
+    lidIndent.insert(0,refer.getPointAt(refer.length-5))
+    lidIndent.segments.unshift(new Segment(lidIndent.bounds.topRight))
+    
     // create the tabs
     var tabs = makeTabs(path.children[0],path.children[0].length)
-    //make specail lid system here:
+
+    //make specail lid tabs here:
     var tabs2 = makeTabs(path.children[1],path.children[1].length+10)
     let holeOff = 2
     let hingeInner = Path.Circle(path.children[1].getPointAt((path.children[1].length-holeOff)),Math.hypot(thickness,tabLength)/2)
@@ -109,7 +102,7 @@ function makeLid(x,y){
     dilaConnectedPath.strokeColor = null
 
 
-    dilaConnectedPath = dilaConnectedPath.subtract(thing)
+    dilaConnectedPath = dilaConnectedPath.subtract(lidIndent)
     dilaConnectedPath = dilaConnectedPath.unite(hingeOuter)
     dilaConnectedPath = dilaConnectedPath.subtract(tabs)
     dilaConnectedPath.strokeColor = "#000000"
@@ -121,25 +114,42 @@ function makeSide(x,y){
     //let lenList = [length-(thickness*2),width,length -(thickness*2),width]
     let xcord = x;
     
-    // tabs around box
+    let pannel1 = new Path.Rectangle(new Point(xcord,y),new Size(lenList[0],height));
     let tabs = new Path();
-    tabs = tabs.unite(makeTabs(path, lenList[0], height,thickness/2))
-    tabs = tabs.unite(makeTabs(path, lenList[0], 2*height+perimeter+lenList[1],-thickness/2))
+    tabs = tabs.unite(makeTabs(pannel1, lenList[0], height,thickness/2))
+    tabs = tabs.unite(makeTabs(pannel1, lenList[0], 2*height+lenList[0],-thickness/2))
+    pannel1 = pannel1.unite(tabs)
+    
+    let p = pannel1.bounds
+    makeLivingHinge(p.x, p.y, (p.width-12), p.height)
+    pannel1.strokeColor="#000000"
 
-    // 2nd pair of tabs
-    tabs = tabs.unite(makeTabs(path, lenList[1], height+lenList[0],thickness/2))
-    tabs = tabs.unite(makeTabs(path, lenList[1], 2*height+perimeter,-thickness/2))
-    // tabs.strokeColor="#ff0000"
+    xcord += lenList[0]+ 10
 
-    path = path.unite(tabs)
+    let offset = 3.5
+    let pannel2 = new Path.Rectangle(new Point(xcord,y),new Size(lenList[1]+offset,height));
+    let tabs2 = new Path();
+    tabs2 = tabs2.unite(makeTabs(pannel2, lenList[1]+10, height,thickness/2))
+    tabs2 = tabs2.unite(makeTabs(pannel2, lenList[1]+10, 2*height+lenList[1]+(2*offset-10),-thickness/2))
+    pannel2 = pannel2.unite(tabs2)
+  
+    let p2 = pannel2.bounds
+    makeLivingHinge(p2.x, p2.y, (p2.width-12), p2.height)
+    pannel2.strokeColor="#000000"
 
+    xcord += lenList[1]+ 10
 
-    makeLivingHinge(xcord,y-thickness,lenList[0]+lenList[1]-3,height+y)
-    var path2 = new Path.Line(new Point(x+lenList[0]+lenList[1],y), new Point(x+lenList[0]+lenList[1],height+y));
-    path2.strokeColor = '#000000';
+    offset = 6
+    let pannel3 = new Path.Rectangle(new Point(xcord,y),new Size(lenList[2]-offset,height));
+    let tabs3 = new Path();
+    tabs3 = tabs3.unite(makeTabs(pannel3, lenList[2]-10, height+10,thickness/2))
+    tabs3 = tabs3.unite(makeTabs(pannel3, lenList[2]-10, 2*height+lenList[2]-(2*offset),-thickness/2))
+    pannel3 = pannel3.unite(tabs3)
+    
 
+    pannel3.strokeColor="#000000"
+    
 
-    path.strokeColor = '#000000';
 }
 function makeTabs(shapePath,length, start=0, dist=0)
 {
