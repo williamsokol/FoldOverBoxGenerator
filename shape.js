@@ -59,8 +59,8 @@ makeSide(10+thickness,10)
 // process()
 
 function makeLid(x,y){
-    test = new Path.Rectangle(new Point(x,y+width-20),new Size(95,20))
-    test.strokeColor="#ff0000"
+    // test = new Path.Rectangle(new Point(x,y+width-20),new Size(95,20))
+    // test.strokeColor="#ff0000"
     var path = customSVG.clone()
     
     
@@ -131,11 +131,11 @@ function makeSide(x,y){
 
     xcord += lenList[0]+ 10
 
-    let offset = 6
+    let offset = 4
     let pannel2 = new Path.Rectangle(new Point(xcord,y),new Size(lenList[1]+offset,height));
     let tabs2 = new Path();
-    tabs2 = tabs2.unite(makeTabs(pannel2, lenList[1]+10, height+3,thickness/2))
-    tabs2 = tabs2.unite(makeTabs(pannel2, lenList[1]+10, 2*height+lenList[1]+(2*offset-10)-3,thickness/2))
+    tabs2 = tabs2.unite(makeTabs(pannel2, lenList[1]+10, height+1,thickness/2))
+    tabs2 = tabs2.unite(makeTabs(pannel2, lenList[1]+10, 2*height+lenList[1]+(2*offset-10)-1,thickness/2))
     
     let lidTab = (makeTabs(pannel2, height/2, height/4,+thickness/2))
 
@@ -148,7 +148,7 @@ function makeSide(x,y){
     
     xcord += lenList[1]+ 10
 
-    offset = 6
+    offset = 8
     let pannel3 = new Path.Rectangle(new Point(xcord,y),new Size(lenList[2]-offset,height));
     let tabs3 = new Path();
     tabs3 = tabs3.unite(makeTabs(pannel3, lenList[2]-10, (height),thickness/2))
