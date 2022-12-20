@@ -29,14 +29,12 @@ const group = svgGroup.lastChild;
 var customSVG = group.lastChild;
 customSVG.strokeColor= null
 
-const thickness = 4.8
-var Dthick = thickness*2
-const tabLength = 10
-const width = 130
-const length = 140
+thickness = 2.8
+tabLength = 10
+width = 130
+length = 140
+height = 60
 
-const height = 60
-const cornerSize = new Size(30, 30);
 
 let rectangle1 = new Rectangle(new Point(0,0),new Size(length,width));
 customSVG.fitBounds(rectangle1)
@@ -62,7 +60,6 @@ function makeLid(x,y){
     // test = new Path.Rectangle(new Point(x,y+width-20),new Size(95,20))
     // test.strokeColor="#ff0000"
     var path = customSVG.clone()
-    
     
     path.position = new Point(x+length/2,y+width/2)
     
@@ -106,6 +103,12 @@ function makeLid(x,y){
     dilaConnectedPath = dilaConnectedPath.subtract(lidIndent)
     dilaConnectedPath = dilaConnectedPath.unite(hingeOuter)
     dilaConnectedPath = dilaConnectedPath.subtract(tabs)
+
+    makeMotorMount(x+10,y+10)
+
+
+
+
     dilaConnectedPath.strokeColor = "#000000"
 }
 function makeSide(x,y){
@@ -120,7 +123,10 @@ function makeSide(x,y){
     tabs = tabs.unite(makeTabs(pannel1, lenList[0], height,thickness/2))
     tabs = tabs.unite(makeTabs(pannel1, lenList[0], 2*height+lenList[0],thickness/2))
     
-    let lidDent = (makeTabs(pannel1, height/2, (height+lenList[0])+height/4,-thickness/2))
+    let extension = new Path.Rectangle(pannel1.bounds.topRight,new Size(2,height));
+    pannel1 = pannel1.unite(extension)
+    
+    let lidDent = (makeTabs(pannel1, height/2, (height+pannel1.bounds.width)+height/4,-thickness/2))
     
     pannel1 = pannel1.unite(tabs)
     pannel1 = pannel1.subtract(lidDent)
@@ -160,98 +166,37 @@ function makeSide(x,y){
     
 
 }
-function makeTabs(shapePath,length, start=0, dist=0)
+
+function makeMotorMount(x,y)
 {
-
-
-    var tabPath = new Path()
-
-    let tabPos = 0;
+    let mmW = 47.6;
+    let mmL = 23.0;
     
-    let tabCount = getTabCount(length)
-    for(var j=0;j<tabCount;j++){
-        var tab = new Path.Rectangle(new Point(0,0),new Size(tabLength,thickness));
-        tabPos = j*(length/tabCount) + (length/tabCount)/2 + start
-        var offsetPoint = shapePath.getPointAt(tabPos)
-        var tan = shapePath.getTangentAt(tabPos); 
-        let norm = shapePath.getNormalAt(tabPos)
-
-        tab.rotate(tan.angle/*, offsetPoint*/);
-        tab.position = offsetPoint + (norm*dist)
-        
-        // console.log("test: " + norm*dist +" "+ j)
-        tabPath = tabPath.unite(tab)
-    }
-    // tabPath.strokeColor = "#00ff00"
-    return tabPath;
-}
-function makeLivingHinge(x,y,w,h)
-{
-    const spacing = 3,line = 17,gap = 7;
-
-    x += spacing
-    w -= spacing
-    
-    // let a = new Path.Rectangle(new Point(x,y),new Size(w,h))
-    // a.strokeColor = "#000000"
-    var path = new CompoundPath() 
-    
-    for(var i=0; i< w/spacing;i++){
-        let yOffset = (i%2 *(line+gap)/2)- line
-
-        while(yOffset < h){
-            let top = Math.max(y+yOffset, y);
-            let bot = Math.min(line+y+yOffset, y+h)
-
-            var path2 = new Path.Line(new Point(i*spacing+x,top), new Point(i*spacing+x,bot));
-            path2.strokeColor = '#000000'
-            yOffset += gap + line
-            path.addChild(path2)
-
-        }
-    }
-    path.strokeColor = '#000000'
-    return path
-}
-
-function process()
-{
-
-    project.activeLayer.scale(3.779528)
-    // project.activeLayer.scale(2)
-
-    project.activeLayer.position = project.activeLayer.bounds.size/2;
-
-    // myCanvas is an Id made in html doc
-    myCanvas.width = project.activeLayer.bounds.width+100
-    myCanvas.height = project.activeLayer.bounds.height+10
-    
-    
-    
-   
-    downloadAsSVG()
-    // console.log(project.exportSVG())
-    // rect.strokeColor = "#000000"
-}
-var downloadAsSVG = function (fileName) {
-   
-    if(!fileName) {
-        fileName = "paperjs_example.svg"
-    }
+    let mScrew = 5.4;
  
-    let rect = new Rectangle(project.activeLayer.bounds)
-    rect = rect.scale(1.1) ;
-
-    var url = "data:image/svg+xml;utf8," + encodeURIComponent(project.exportSVG({asString:true,bounds:rect}));
+    // main area box
+    let rectangle1 = new Path.Rectangle(new Point(x,y),new Size(mmL,mmW));
+    // rectangle1 = rectangle1.scale(1.1)
+    rectangle1.strokeColor = "#000000"
     
-    var link = document.createElement("a");
-    link.download = fileName;
-    link.href = url;
-    link.click();
- }
+    // motor hole 
+    let cir = new Path.Circle(new Point(x+mmL/2,y+14.1),mmL/2);
+    // motor screw hole 1
+    let cir2 = new Path.Circle(new Point(x+mmL/2,y+mScrew/2),mScrew/2);
+    // cir2.strokeColor = "#000000"
+    // motor screw hole 2
+    let cir3 = new Path.Circle(new Point(x+mmL/2,y+28.2-mScrew/2),mScrew/2);
+    // cir3.strokeColor = "#000000"
+    
+    cir = cir.unite(cir2)
+    cir = cir.unite(cir3)
+    cir.strokeColor = "#000000"
+    
+     // mount screw hole 1
+    let cir4 = new Path.Circle(new Point(x+mmL/2-(17.8/2),y+mmW-2.6),1.5);
+    cir4.strokeColor = "#000000"
+    // mount screw hole 2
+    let cir5 = new Path.Circle(new Point(x+mmL/2+(17.8/2),y+mmW-2.6),1.5);
+    cir5.strokeColor = "#000000"
+}
 
- function getTabCount(len, tabDense = 2.0)
- {
-    return Math.floor(((len-tabLength)/tabDense)/tabLength)
- }
-window.process = process;
