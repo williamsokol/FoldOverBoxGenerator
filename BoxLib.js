@@ -38,7 +38,7 @@ window.getTabCount = function (len, tabDense = 2.0)
 
 window.makeLivingHinge = function(x,y,w,h)
 {
-    const spacing = 3,line = 17,gap = 7;
+    const spacing = 2,line = 34,gap = 7;
 
     x += spacing
     w -= spacing
@@ -65,17 +65,18 @@ window.makeLivingHinge = function(x,y,w,h)
     return path
 }
 
-function makeMotorMount(x,y)
+window.makeMotorMount = function (x,y)
 {
     let mmW = 47.6;
     let mmL = 23.0;
     
-    let mScrew = 5.4;
+    let mScrew = 10;
  
     // main area box
     let rectangle1 = new Path.Rectangle(new Point(x,y),new Size(mmL,mmW));
     rectangle1 = rectangle1.scale(1.1)
-    rectangle1.strokeColor = "#000000"
+    rectangle1.strokeColor = "#ff0000"
+    rectangle1.remove()
     
     // motor hole 
     let cir = new Path.Circle(new Point(x+mmL/2,y+14.1),mmL/2);
@@ -98,7 +99,15 @@ function makeMotorMount(x,y)
     cir5.strokeColor = "#000000"
 }
 
-// new functions go here v------------------v
+window.makeTabLine = function(x,y,dist,rot = 0){
+    var from = new Point(x, y);
+    var to = new Point(x, y-dist);
+    var path = new Path.Line(from, to);
+    path.rotate(rot,from)
+    return path
+}
+
+// new functions go here v----v
 
 
 function process()
