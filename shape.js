@@ -90,6 +90,11 @@ function makeLid(x,y){
     p = makeTabLine(x+60,y+20,height,200)
     tabs4 = makeTabs(p,height)
 
+    // hole for switch to be see from out side of frame
+    let test = Path.Rectangle(new Point(x+60-8,y+20),new Size(3,height));
+    test = test.rotate(20,new Point(x+60,y+20))
+    test.strokeColor = "#000000"
+
     // merge the tabs together
     tabs = tabs.unite(tabs2)
     tabs = tabs.unite(tabs3)
@@ -142,7 +147,7 @@ function makeSide(x,y){
     pannel1 = pannel1.unite(extension)
     
     let lidDent = (makeTabs(pannel1, height/2, (height+pannel1.bounds.width)+height/4,-thickness/2))
-    let cir4 = new Path.Circle(new Point(x+90,y+height/2),height/4);
+    let cir4 = new Path.Circle(new Point(x+95,y+height/2),height/4);
     cir4.strokeColor = "#000000"
     
     pannel1 = pannel1.unite(tabs)
@@ -173,12 +178,18 @@ function makeSide(x,y){
     
     xcord += lenList[1]+ 10
     // make pannel 3
-    offset = 8
-    let pannel3 = new Path.Rectangle(new Point(xcord,y),new Size(lenList[2]-offset,height));
+    offset = 0
+    let pannel3 = new Path.Rectangle(new Point(xcord,y),new Size(lenList[2],height));
     let tabs3 = new Path();
     tabs3 = tabs3.unite(makeTabs(pannel3, lenList[2]-10, (height),thickness/2))
-    tabs3 = tabs3.unite(makeTabs(pannel3, lenList[2]-10,2*height+lenList[2]-(2*offset-10),thickness/2))
+    tabs3 = tabs3.unite(makeTabs(pannel3, lenList[2]-10,2*height+lenList[2]-(-10),thickness/2))
     pannel3 = pannel3.unite(tabs3)
+
+    let pannel3_1 = new Path.Rectangle(new Point(xcord,y),new Size(thickness/2,height));
+    let pannel3_2 = new Path.Rectangle(new Point(xcord+lenList[2]-8,y),new Size(8,height));
+
+    // pannel3 = pannel3.subtract(pannel3_1)
+    pannel3 = pannel3.subtract(pannel3_2)
     
     xcord += lenList[2]+ 10
     pannel3.strokeColor="#000000"
