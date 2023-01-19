@@ -188,7 +188,7 @@ function makeSide(x,y){
     let pannel3_1 = new Path.Rectangle(new Point(xcord,y),new Size(thickness/2,height));
     let pannel3_2 = new Path.Rectangle(new Point(xcord+lenList[2]-8,y),new Size(8,height));
 
-    // pannel3 = pannel3.subtract(pannel3_1)
+    pannel3 = pannel3.subtract(pannel3_1)
     pannel3 = pannel3.subtract(pannel3_2)
     
     xcord += lenList[2]+ 10
