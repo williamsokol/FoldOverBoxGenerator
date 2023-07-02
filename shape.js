@@ -152,12 +152,11 @@ function makeSide(x,y){
     let cir4 = new Path.Circle(new Point(x+95,y+height/2),height/4);
     cir4.strokeColor = "#000000"
     
+    let p = pannel1.bounds  // getting bounds before uniting tabs on
+    makeLivingHinge(p.x, p.y, (p.width-12), p.height)
+    
     pannel1 = pannel1.unite(tabs)
     pannel1 = pannel1.subtract(lidDent)
-    
-    
-    let p = pannel1.bounds
-    makeLivingHinge(p.x, p.y, (p.width-12), p.height)
     pannel1.strokeColor="#000000"
 
     xcord += lenList[0]+ 10
