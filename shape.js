@@ -29,11 +29,12 @@ const group = svgGroup.lastChild;
 var customSVG = group.lastChild;
 customSVG.strokeColor= null
 
+const switchSlitLength = 50;
 thickness = 5.1
 tabLength = 10
 width = 130
 length = 140
-height = 60
+height = 70
 
 
 let rectangle1 = new Rectangle(new Point(0,0),new Size(length,width));
@@ -86,12 +87,13 @@ function makeLid(x,y){
     
     var tabs3 = makeTabs(path.children[2],path.children[2].length-10,10)
 
+    
     // mid panel tabs
-    p = makeTabLine(x+60,y+20,height,200)
-    tabs4 = makeTabs(p,height)
+    p = makeTabLine(x+60,y+20,switchSlitLength,200)
+    tabs4 = makeTabs(p,switchSlitLength)
 
     // hole for switch to be see from out side of frame
-    let test = Path.Rectangle(new Point(x+60-8,y+20),new Size(3,height));
+    let test = Path.Rectangle(new Point(x+60-8,y+20),new Size(3,switchSlitLength));
     test = test.rotate(20,new Point(x+60,y+20))
     test.strokeColor = "#000000"
 
@@ -198,8 +200,8 @@ function makeSide(x,y){
      offset = 8
      let pannel4 = new Path.Rectangle(new Point(xcord,y),new Size(height,height));
      let tabs4 = new Path();
-     tabs4 = tabs4.unite(makeTabs(pannel4, height, (0),thickness/2))
-     tabs4 = tabs4.unite(makeTabs(pannel4, height, (height*2),thickness/2))
+     tabs4 = tabs4.unite(makeTabs(pannel4, switchSlitLength, height/2-switchSlitLength/2,thickness/2))
+     tabs4 = tabs4.unite(makeTabs(pannel4, switchSlitLength, (height*2.5)-switchSlitLength/2,thickness/2))
 
     let cir1 = new Path.Circle(new Point(xcord+ height/2 - 45.7/2,y+height/2- 29.6/2),1);
     cir1.strokeColor = "#000000"
