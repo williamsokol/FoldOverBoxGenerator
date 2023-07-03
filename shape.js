@@ -29,6 +29,8 @@ const group = svgGroup.lastChild;
 var customSVG = group.lastChild;
 customSVG.strokeColor= null
 
+const screwThic = 3
+const screwLong = 15
 const switchSlitLength = 50;
 thickness = 5.1
 tabLength = 10
@@ -61,6 +63,7 @@ customSVG.remove()
 // process()
 
 function makeLid(x,y){
+    var finalPaths = [];
     // test = new Path.Rectangle(new Point(x,y+width-20),new Size(95,20))
     // test.strokeColor="#ff0000"
     var path = customSVG.clone()
@@ -91,7 +94,8 @@ function makeLid(x,y){
     // mid panel tabs
     p = makeTabLine(x+60,y+20,switchSlitLength,200)
     tabs4 = makeTabs(p,switchSlitLength)
-
+    finalPaths["midPanelTabline"] = p
+    
     // hole for switch to be see from out side of frame
     let test = Path.Rectangle(new Point(x+60-8,y+20),new Size(3,switchSlitLength));
     test = test.rotate(20,new Point(x+60,y+20))
@@ -123,15 +127,20 @@ function makeLid(x,y){
     dilaConnectedPath = dilaConnectedPath.subtract(tabs)
 
 
-    //
+    //MAKE screw holes:
+    holepos = finalPaths["midPanelTabline"].getPointAt(finalPaths["midPanelTabline"].length/2)
+    screwhole = new Path.Circle(holepos,screwThic/2);
     makeMotorMount(x+21-7,y+88)
-  
-
-
+    
+    
+    
+    // finalPaths["midPanelTabline"].strokeColor = "#ff0000"
+    screwhole.strokeColor = "#000000"
     dilaConnectedPath.strokeColor = "#000000"
 
     //delete everything not needed
     path.remove()
+    return finalPaths
 }
 function makeSide(x,y){
     let rectangle1 = new Path.Rectangle(new Point(x,y),new Size(perimeter,height));
@@ -195,19 +204,26 @@ function makeSide(x,y){
     xcord += lenList[2]+ 10
     pannel3.strokeColor="#000000"
 
-     // make pannel 4
-     offset = 8
-     let pannel4 = new Path.Rectangle(new Point(xcord,y),new Size(height,height));
-     let tabs4 = new Path();
-     tabs4 = tabs4.unite(makeTabs(pannel4, switchSlitLength, height/2-switchSlitLength/2,thickness/2))
-     tabs4 = tabs4.unite(makeTabs(pannel4, switchSlitLength, (height*2.5)-switchSlitLength/2,thickness/2))
+    // make pannel 4
+    offset = 8
+    let pannel4 = new Path.Rectangle(new Point(xcord,y),new Size(height,height));
+    let tabs4 = new Path();
+    tabs4 = tabs4.unite(makeTabs(pannel4, switchSlitLength, height/2-switchSlitLength/2,thickness/2))
+    tabs4 = tabs4.unite(makeTabs(pannel4, switchSlitLength, (height*2.5)-switchSlitLength/2,thickness/2))
+    
+    //screw holes
 
+    let screwTracks = new Path();
+    screwTracks = screwTracks.unite( Path.Rectangle(pannel4.getPointAt(pannel4.length/8+screwThic/2),new Size(screwLong,screwThic)));
+    screwTracks = screwTracks.unite(new Path.Rectangle(pannel4.getPointAt((pannel4.length/8)*5-screwThic/2),new Size(-screwLong,screwThic)));
+    // a.strokeColor = "#000000"
     let cir1 = new Path.Circle(new Point(xcord+ height/2 - 45.7/2,y+height/2- 29.6/2),1);
     cir1.strokeColor = "#000000"
     let cir2 = new Path.Circle(new Point(xcord+ height/2 + 45.7/2,y+height/2+ 29.6/2),1);
     cir2.strokeColor = "#000000"
     //  tabs4 = tabs4.unite(makeTabs(pannel4, lenList[2]-10,2*height+lenList[2]-(2*offset-10),thickness/2))
     pannel4 = pannel4.unite(tabs4)
+    pannel4 = pannel4.subtract(screwTracks)
      
  
     pannel4.strokeColor="#000000"

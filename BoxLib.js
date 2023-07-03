@@ -38,7 +38,7 @@ window.getTabCount = function (len, tabDense = 2.0)
 
 window.makeLivingHinge = function(x,y,w,h)
 {
-    const spacing = 2,line = 34,gap = 7;
+    const spacing = 2,line = 19,gap = 7;
 
     x += spacing
     w -= spacing
