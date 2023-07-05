@@ -140,7 +140,7 @@ function makeLid(x,y){
     
     
     // finalPaths["midPanelTabline"].strokeColor = "#ff0000"
-    finalPaths["botTabLine"].strokeColor = "#ff0000"
+    // finalPaths["botTabLine"].strokeColor = "#ff0000"
     console.log(finalPaths["botTabLine"].length)
 
     for(var key in screwholes) {
