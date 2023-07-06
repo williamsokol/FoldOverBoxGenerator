@@ -87,7 +87,7 @@ function makeLid(x,y){
     var tabs2 = makeTabs(path.children[1],path.children[1].length+10)
     let holeOff = 2
     let hingeInner = Path.Circle(path.children[1].getPointAt((path.children[1].length-holeOff)),Math.hypot(thickness,tabLength)/2)
-    let hingeOuter = Path.Circle(path.children[1].getPointAt((path.children[1].length-holeOff)),9)
+    let hingeOuter = Path.Circle(path.children[1].getPointAt((path.children[1].length-holeOff)),12)
     hingeInner.strokeColor = "#00000"
     
     var tabs3 = makeTabs(path.children[2],path.children[2].length-10,10)
@@ -180,12 +180,13 @@ function makeSide(x,y){
     xcord += lenList[0]+ 10
      // make pannel 2
 
-    let offset = 4
+    let offset = 3
     let pannel2 = new Path.Rectangle(new Point(xcord,y),new Size(lenList[1]+offset,height));
+    console.log(pannel2.length);
     let tabs2 = new Path();
-    tabs2 = tabs2.unite(makeTabs(pannel2, lenList[1]+10, height+1,thickness/2))
-    tabs2 = tabs2.unite(makeTabs(pannel2, lenList[1]+10, 2*height+lenList[1]+(2*offset-10)-1,thickness/2))
-    
+    tabs2 = tabs2.unite(makeTabs(pannel2, lenList[1]+10, height-0,thickness/2))
+    tabs2 = tabs2.unite(makeTabs(pannel2, lenList[1]+10,pannel2.length- (lenList[1]+10-0),thickness/2))
+    //2*height+lenList[1]+(2*offset-10)-1
     let lidTab = (makeTabs(pannel2, height/2, height/4,+thickness/2))
 
     let p2 = pannel2.bounds
