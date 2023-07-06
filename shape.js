@@ -212,8 +212,9 @@ function makeSide(x,y){
     screwTracks = new Path();
     a = pannel3.getBounds()
     console.log(a.size.width)
-    screwTracks = screwTracks.unite( Path.Rectangle(pannel3.getPointAt(height+(a.size.width*3/4)),new Size(screwThic,screwLong)));
-    screwTracks = screwTracks.unite( Path.Rectangle(pannel3.getPointAt(pannel3.length-(a.size.width*3/4)),new Size(screwThic,-screwLong)));
+    let adjustThic = screwThic-.5
+    screwTracks = screwTracks.unite( Path.Rectangle(pannel3.getPointAt(height+(a.size.width*3/4)-(adjustThic/2)),new Size(adjustThic,screwLong)));
+    screwTracks = screwTracks.unite( Path.Rectangle(pannel3.getPointAt(pannel3.length-(a.size.width*3/4)+(adjustThic/2)),new Size(adjustThic,-screwLong)));
     
     //screwTracks = screwTracks.unite(new Path.Rectangle(pannel4.getPointAt((pannel4.length/8)*5-screwThic/2),new Size(-screwLong,screwThic)));
     
