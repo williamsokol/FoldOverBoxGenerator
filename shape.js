@@ -30,7 +30,7 @@ var customSVG = group.lastChild;
 customSVG.strokeColor= null
 
 const screwThic = 3
-const screwLong = 15
+const screwLong = 10
 const switchSlitLength = 50;
 thickness = 5.1
 tabLength = 10
@@ -70,8 +70,8 @@ function makeLid(x,y){
     
     path.position = new Point(x+length/2,y+width/2)
     finalPaths["botTabLine"] = new Path(path.children[2].segments)
-    
-    
+    finalPaths["leftTabLine"] = new Path(path.children[0].segments)
+    finalPaths["leftTabLine"].strokeColor = "#ff0000"
     //indent to free lid tabs
     let lidIndent  = new Path(path.children[1].segments)
     lidIndent = PaperOffset.offset(lidIndent, thickness/2, { join: 'round' })
@@ -82,7 +82,7 @@ function makeLid(x,y){
     
     // create the tabs
     var tabs = makeTabs(path.children[0],path.children[0].length)
-
+    
     //make specail lid tabs here:
     var tabs2 = makeTabs(path.children[1],path.children[1].length+10)
     let holeOff = 2
@@ -130,9 +130,16 @@ function makeLid(x,y){
 
 
     //MAKE screw holes:
-    holepos = finalPaths["midPanelTabline"].getPointAt(finalPaths["midPanelTabline"].length/2)
     let screwholes = [];
+    holepos = finalPaths["midPanelTabline"].getPointAt(finalPaths["midPanelTabline"].length/2)
     screwholes["midPanel"] = new Path.Circle(holepos,screwThic/2);
+
+    holepos = finalPaths["leftTabLine"].getPointAt(finalPaths["leftTabLine"].length/8)
+    screwholes["leftTabLine1"] = new Path.Circle(holepos,screwThic/2);
+
+    holepos = finalPaths["leftTabLine"].getPointAt(finalPaths["leftTabLine"].length/1.33)
+    screwholes["leftTabLine2"] = new Path.Circle(holepos,screwThic/2);
+
     holepos = finalPaths["botTabLine"].getPointAt(finalPaths["botTabLine"].length/4)
     screwholes["botRight"] = new Path.Circle(holepos,screwThic/2);
     makeMotorMount(x+21-7,y+88)
@@ -172,11 +179,20 @@ function makeSide(x,y){
     
     let p = pannel1.bounds  // getting bounds before uniting tabs on
     makeLivingHinge(p.x, p.y, (p.width-12), p.height)
-    
+
+    //screw holes
+
+    screwTracks = new Path();
+    screwTracks = screwTracks.unite( Path.Rectangle(pannel1.getPointAt((p.height+p.width/8) - screwThic/2),new Size(screwThic,screwLong)));
+    screwTracks = screwTracks.unite( Path.Rectangle(pannel1.getPointAt((pannel1.length-p.width/8) + screwThic/2),new Size(screwThic,-screwLong)));
+    screwTracks = screwTracks.unite( Path.Rectangle(pannel1.getPointAt((p.height+p.width/1.33) - screwThic/2),new Size(screwThic,screwLong)));
+    screwTracks = screwTracks.unite( Path.Rectangle(pannel1.getPointAt((pannel1.length-p.width/1.33) + screwThic/2),new Size(screwThic,-screwLong)));
+    // screwTracks.strokeColor = "#ff0000"
     pannel1 = pannel1.unite(tabs)
     pannel1 = pannel1.subtract(lidDent)
+    pannel1 = pannel1.subtract(screwTracks)
     pannel1.strokeColor="#000000"
-
+    
     xcord += lenList[0]+ 10
      // make pannel 2
 
