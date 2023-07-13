@@ -257,9 +257,9 @@ function makeSide(x,y){
     screwTracks = screwTracks.unite( Path.Rectangle(pannel4.getPointAt(pannel4.length/8+screwThic/2),new Size(screwLong,screwThic)));
     screwTracks = screwTracks.unite(new Path.Rectangle(pannel4.getPointAt((pannel4.length/8)*5-screwThic/2),new Size(-screwLong,screwThic)));
     // a.strokeColor = "#000000"
-    let cir1 = new Path.Circle(new Point(xcord+ height/2 - 39.4/2+9.1/2,y+height/2- 28.6/2),1);
+    let cir1 = new Path.Circle(new Point(xcord+ height/2 - 39.4/2+9.1/2,y+height/2- 28.6/2 + 10),1);
     cir1.strokeColor = "#000000"
-    let cir2 = new Path.Circle(new Point(xcord+ height/2 + 39.4/2+9.1/2,y+height/2+ 26.6/2),1);
+    let cir2 = new Path.Circle(new Point(xcord+ height/2 + 39.4/2+9.1/2,y+height/2+ 28.6/2 + 10),1);
     cir2.strokeColor = "#000000"
     //  tabs4 = tabs4.unite(makeTabs(pannel4, lenList[2]-10,2*height+lenList[2]-(2*offset-10),thickness/2))
     pannel4 = pannel4.unite(tabs4)
