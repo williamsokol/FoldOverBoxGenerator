@@ -212,7 +212,7 @@ function makeSide(x,y){
     
     hingeTracks = Path.Rectangle(new Point(xcord+lenList[1]+offset-12,y),new Size(4,thickness));
     hingeTracks = hingeTracks.unite( Path.Rectangle(new Point(xcord+lenList[1]+offset-12,y+height-thickness),new Size(4,thickness)));
-    hingeTracks.strokeColor = "#ff0000"
+    // hingeTracks.strokeColor = "#ff0000"
 
     let p2 = pannel2.bounds
     makeLivingHinge(p2.x+1, p2.y, (p2.width-12), p2.height)
@@ -299,7 +299,7 @@ function makeSide(x,y){
 
 function makeSmallParts(x,y){
     let hingeOuterBrace = Path.Circle(new Point(x,y),12)
-    let slot = Path.Rectangle(x-thickness/2,y,thickness, 12)
+    let slot = Path.Rectangle(x-thickness/2,y-tabLength/2,thickness, 12+tabLength/2)
     // slot.strokeColor = "#00ff00"
     let tab = Path.Rectangle(x-thickness/2,y+8,thickness/8, 4)
     tab.removeSegment(3)
@@ -314,7 +314,9 @@ function makeSmallParts(x,y){
     hingeOuterBrace.strokeColor = "#000000"
 
     let hingeOuterBrace2 = hingeOuterBrace.clone()
-    hingeOuterBrace2.position = new Point(x+50,y)
+    hingeOuterBrace2.position = new Point(x+30,y)
+    // hingeOuterBrace2.position = new Point(319,y+30)
+    // hingeOuterBrace2.rotate(135)
     
 
 }
