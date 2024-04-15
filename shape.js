@@ -57,6 +57,8 @@ makeLid(40+length,30+height)
 
 makeSide(10+thickness,10)
 
+makeSmallParts(400,200);
+
 // delete everything not needed
 customSVG.remove()
 
@@ -170,6 +172,7 @@ function makeSide(x,y){
     let tabs = new Path();
     tabs = tabs.unite(makeTabs(pannel1, lenList[0], height,thickness/2))
     tabs = tabs.unite(makeTabs(pannel1, lenList[0], 2*height+lenList[0],thickness/2))
+
     
     let extension = new Path.Rectangle(pannel1.bounds.topRight,new Size(2,height));
     pannel1 = pannel1.unite(extension)
@@ -206,11 +209,17 @@ function makeSide(x,y){
     //2*height+lenList[1]+(2*offset-10)-1
     let lidTab = (makeTabs(pannel2, height/2, height/4,+thickness/2))
 
+    
+    hingeTracks = Path.Rectangle(new Point(xcord+lenList[1]+offset-12,y),new Size(4,thickness));
+    hingeTracks = hingeTracks.unite( Path.Rectangle(new Point(xcord+lenList[1]+offset-12,y+height-thickness),new Size(4,thickness)));
+    hingeTracks.strokeColor = "#ff0000"
+
     let p2 = pannel2.bounds
     makeLivingHinge(p2.x+1, p2.y, (p2.width-12), p2.height)
     pannel2 = pannel2.unite(tabs2)
     pannel2 = pannel2.unite(lidTab)
-    
+    pannel2 = pannel2.subtract(hingeTracks)
+
     pannel2.strokeColor="#000000"
     
     xcord += lenList[1]+ 10
@@ -225,6 +234,11 @@ function makeSide(x,y){
     let pannel3_1 = new Path.Rectangle(new Point(xcord,y),new Size(thickness/2,height));
     let pannel3_2 = new Path.Rectangle(new Point(xcord+lenList[2]-8,y),new Size(8,height));
     
+    //indent in the bottom pannel for hinge braces
+    hingeTracks = Path.Rectangle(new Point(xcord+lenList[2]-8,y),new Size(-12/2,thickness));
+    hingeTracks = hingeTracks.unite( Path.Rectangle(new Point(xcord+lenList[2]-8,y+height-thickness),new Size(-12/2,thickness)));
+    // hingeTracks.strokeColor = "#ff0000"
+    
     //screw holes
     screwTracks = new Path();
     a = pannel3.getBounds()
@@ -238,7 +252,9 @@ function makeSide(x,y){
     pannel3 = pannel3.subtract(pannel3_1)
     pannel3 = pannel3.subtract(pannel3_2)
     pannel3 = pannel3.unite(tabs3)
+    pannel3 = pannel3.subtract(hingeTracks)
     pannel3 = pannel3.subtract(screwTracks)
+
     
     xcord += lenList[2]+ 10
     pannel3.strokeColor="#000000"
@@ -281,3 +297,24 @@ function makeSide(x,y){
 }
 
 
+function makeSmallParts(x,y){
+    let hingeOuterBrace = Path.Circle(new Point(x,y),12)
+    let slot = Path.Rectangle(x-thickness/2,y,thickness, 12)
+    // slot.strokeColor = "#00ff00"
+    let tab = Path.Rectangle(x-thickness/2,y+8,thickness/8, 4)
+    tab.removeSegment(3)
+    // tab.strokeColor = "#ff0000"
+    let tab2 = Path.Rectangle(x+thickness/2,y+8,-thickness/8, 4)
+    tab2.removeSegment(3)
+    // tab2.strokeColor = "#ff0000"
+    
+    hingeOuterBrace = hingeOuterBrace.subtract(slot)
+    hingeOuterBrace = hingeOuterBrace.unite(tab)
+    hingeOuterBrace = hingeOuterBrace.unite(tab2)
+    hingeOuterBrace.strokeColor = "#000000"
+
+    let hingeOuterBrace2 = hingeOuterBrace.clone()
+    hingeOuterBrace2.position = new Point(x+50,y)
+    
+
+}
