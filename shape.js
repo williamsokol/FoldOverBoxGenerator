@@ -29,10 +29,10 @@ const group = svgGroup.lastChild;
 var customSVG = group.lastChild;
 customSVG.strokeColor= null
 
-const screwThic = 3
+const screwThic = 2
 const screwLong = 10
 const switchSlitLength = 50;
-thickness = 3.2
+thickness = 3
 tabLength = 10
 width = 130
 length = 140
@@ -250,19 +250,28 @@ function makeSide(x,y){
     tabs4 = tabs4.unite(makeTabs(pannel4, switchSlitLength, height/2-switchSlitLength/2,thickness/2))
     tabs4 = tabs4.unite(makeTabs(pannel4, switchSlitLength, (height*2.5)-switchSlitLength/2,thickness/2))
     
-        //screw holes
+    // make wire indent
+    indentW = 40
+    let indent = Path.Rectangle(new Point(xcord+height/2-indentW/2,y),new Size(indentW,height/2- 24/2))
+    // indent.strokeColor = "#ff0000"
 
+        //screw holes
     screwTracks = new Path();
-    // adjustThic = screwThic-.5
-    screwTracks = screwTracks.unite( Path.Rectangle(pannel4.getPointAt(pannel4.length/8+screwThic/2),new Size(screwLong,screwThic)));
-    screwTracks = screwTracks.unite(new Path.Rectangle(pannel4.getPointAt((pannel4.length/8)*5-screwThic/2),new Size(-screwLong,screwThic)));
+    adjustThic = 2.6 - .4
+    
+    screwTracks = screwTracks.unite( Path.Rectangle(pannel4.getPointAt(pannel4.length/8+adjustThic/2),new Size(screwLong,adjustThic)));
+    screwTracks = screwTracks.unite(new Path.Rectangle(pannel4.getPointAt((pannel4.length/8)*5-adjustThic/2),new Size(-screwLong,adjustThic)));
     // a.strokeColor = "#000000"
-    let cir1 = new Path.Circle(new Point(xcord+ height/2 - 39.4/2+9.1/2,y+height/2- 28.6/2 + 10),1);
+    let cir1 = new Path.Circle(new Point(xcord+ height/2 - 70/2 + 3.81,y+height/2 - 24/2 + 3),1);
     cir1.strokeColor = "#000000"
-    let cir2 = new Path.Circle(new Point(xcord+ height/2 + 39.4/2+9.1/2,y+height/2+ 28.6/2 + 10),1);
+    let cir2 = new Path.Circle(new Point(xcord+ height/2 - 70/2+ 57,y+height/2 - 24/2 + 9),1);
     cir2.strokeColor = "#000000"
+
+
+
     //  tabs4 = tabs4.unite(makeTabs(pannel4, lenList[2]-10,2*height+lenList[2]-(2*offset-10),thickness/2))
     pannel4 = pannel4.unite(tabs4)
+    pannel4 = pannel4.subtract(indent)
     pannel4 = pannel4.subtract(screwTracks)
      
  
