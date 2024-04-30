@@ -29,8 +29,8 @@ const group = svgGroup.lastChild;
 var customSVG = group.lastChild;
 customSVG.strokeColor= null
 
-const screwThic = 2
-const screwLong = 10
+const screwThic = 2.3
+const screwLong = 15.8-3
 const switchSlitLength = 50;
 thickness = 3
 tabLength = 10
@@ -85,7 +85,7 @@ function makeLid(x,y){
     // create the tabs
     var tabs = makeTabs(path.children[0],path.children[0].length)
     
-    //make specail lid tabs here:
+    //make special hinge tabs here:
     var tabs2 = makeTabs(path.children[1],path.children[1].length+10)
     let holeOff = 2
     let hingeInner = Path.Circle(path.children[1].getPointAt((path.children[1].length-holeOff)),Math.hypot(thickness,tabLength)/2)
@@ -127,8 +127,8 @@ function makeLid(x,y){
 
 
     dilaConnectedPath = dilaConnectedPath.subtract(lidIndent)
-    dilaConnectedPath = dilaConnectedPath.unite(hingeOuter)
     dilaConnectedPath = dilaConnectedPath.subtract(tabs)
+    dilaConnectedPath = dilaConnectedPath.unite(hingeOuter)
 
 
     //MAKE screw holes:
@@ -144,7 +144,7 @@ function makeLid(x,y){
 
     holepos = finalPaths["botTabLine"].getPointAt(finalPaths["botTabLine"].length/4)
     screwholes["botRight"] = new Path.Circle(holepos,screwThic/2);
-    makeMotorMount(x+21-7,y+88)
+    makeMotorMount(x+21-8,y+88)
     
     
     
@@ -161,7 +161,7 @@ function makeLid(x,y){
     return finalPaths
 }
 function makeSide(x,y){
-    let adjustThic = screwThic-.5
+    let adjustThic = screwThic
     let rectangle1 = new Path.Rectangle(new Point(x,y),new Size(perimeter,height));
     let path = rectangle1
     
@@ -189,8 +189,8 @@ function makeSide(x,y){
     screwTracks = new Path();
     screwTracks = screwTracks.unite( Path.Rectangle(pannel1.getPointAt((p.height+p.width/8) - adjustThic/2),new Size(adjustThic,screwLong)));
     screwTracks = screwTracks.unite( Path.Rectangle(pannel1.getPointAt((pannel1.length-p.width/8) + adjustThic/2),new Size(adjustThic,-screwLong)));
-    screwTracks = screwTracks.unite( Path.Rectangle(pannel1.getPointAt((p.height+p.width/1.33) - adjustThic),new Size(adjustThic,screwLong)));
-    screwTracks = screwTracks.unite( Path.Rectangle(pannel1.getPointAt((pannel1.length-p.width/1.33) + adjustThic),new Size(adjustThic,-screwLong)));
+    screwTracks = screwTracks.unite( Path.Rectangle(pannel1.getPointAt((p.height+p.width/1.33) - adjustThic-.5),new Size(adjustThic,screwLong)));
+    screwTracks = screwTracks.unite( Path.Rectangle(pannel1.getPointAt((pannel1.length-p.width/1.33) + adjustThic+.5),new Size(adjustThic,-screwLong)));
     // screwTracks.strokeColor = "#ff0000"
     pannel1 = pannel1.unite(tabs)
     pannel1 = pannel1.subtract(lidDent)
@@ -210,15 +210,19 @@ function makeSide(x,y){
     let lidTab = (makeTabs(pannel2, height/2, height/4,+thickness/2))
 
     
-    hingeTracks = Path.Rectangle(new Point(xcord+lenList[1]+offset-12,y),new Size(4,thickness));
-    hingeTracks = hingeTracks.unite( Path.Rectangle(new Point(xcord+lenList[1]+offset-12,y+height-thickness),new Size(4,thickness)));
+    hingeTracks = Path.Rectangle(new Point(xcord+lenList[1]+offset-12-tabLength/2,y),new Size(4,thickness));
+    hingeTracks = hingeTracks.unite( Path.Rectangle(new Point(xcord+lenList[1]+offset-12-tabLength/2,y+height-thickness),new Size(4,thickness)));
     // hingeTracks.strokeColor = "#ff0000"
+    let nub = Path.Circle(new Point(xcord+lenList[1]-2.5,y-2), tabLength/3)
+    nub = nub.unite(Path.Circle(new Point(xcord+lenList[1]-2.5,y+height+2), tabLength/3))
+    // nub.strokeColor = "#ff0000"
 
     let p2 = pannel2.bounds
     makeLivingHinge(p2.x+1, p2.y, (p2.width-12), p2.height)
     pannel2 = pannel2.unite(tabs2)
     pannel2 = pannel2.unite(lidTab)
     pannel2 = pannel2.subtract(hingeTracks)
+    pannel2 = pannel2.unite(nub)
 
     pannel2.strokeColor="#000000"
     
@@ -241,14 +245,20 @@ function makeSide(x,y){
     
     //screw holes
     screwTracks = new Path();
+    let screwThic3 = 2.3/2
     a = pannel3.getBounds()
+
     console.log(a.size.width)
     
     screwTracks = screwTracks.unite( Path.Rectangle(pannel3.getPointAt(height+(a.size.width*3/4)-(adjustThic/2)),new Size(adjustThic,screwLong)));
     screwTracks = screwTracks.unite( Path.Rectangle(pannel3.getPointAt(pannel3.length-(a.size.width*3/4)+(adjustThic/2)),new Size(adjustThic,-screwLong)));
-    
+    screwTracks = screwTracks.unite( Path.Circle(new Point(xcord+lenList[2]-8-5,y+height/2-12), screwThic3 ));
+    screwTracks = screwTracks.unite( Path.Circle(new Point(xcord+lenList[2]-8-5,y+height/2+12), screwThic3 ));
+    screwTracks = screwTracks.unite( Path.Circle(new Point(xcord+lenList[2]-8-5-29.5,y+height/2-12), screwThic3 ));
+    screwTracks = screwTracks.unite( Path.Circle(new Point(xcord+lenList[2]-8-5-29.5,y+height/2+12), screwThic3 ));
+    // screwTracks = screwTracks.unite( Path.Rectangle(pannel3.getPointAt(pannel3.length-(a.size.width*3/4)+(adjustThic/2)),new Size(adjustThic,-screwLong)));
     //screwTracks = screwTracks.unite(new Path.Rectangle(pannel4.getPointAt((pannel4.length/8)*5-screwThic/2),new Size(-screwLong,screwThic)));
-    
+    // screwTracks.strokeColor = "#ff0000"
     pannel3 = pannel3.subtract(pannel3_1)
     pannel3 = pannel3.subtract(pannel3_2)
     pannel3 = pannel3.unite(tabs3)
@@ -269,14 +279,15 @@ function makeSide(x,y){
     // make wire indent
     indentW = 40
     let indent = Path.Rectangle(new Point(xcord+height/2-indentW/2,y),new Size(indentW,height/2- 24/2))
+    indent = indent.unite(Path.Rectangle(new Point(xcord,y+10),new Size(6,6)))
     // indent.strokeColor = "#ff0000"
 
         //screw holes
     screwTracks = new Path();
     adjustThic = 2.6 - .4
     
-    screwTracks = screwTracks.unite( Path.Rectangle(pannel4.getPointAt(pannel4.length/8+adjustThic/2),new Size(screwLong,adjustThic)));
-    screwTracks = screwTracks.unite(new Path.Rectangle(pannel4.getPointAt((pannel4.length/8)*5-adjustThic/2),new Size(-screwLong,adjustThic)));
+    screwTracks = screwTracks.unite( Path.Rectangle(pannel4.getPointAt(pannel4.length/8+adjustThic/2),new Size(screwLong+thickness,adjustThic)));
+    screwTracks = screwTracks.unite(new Path.Rectangle(pannel4.getPointAt((pannel4.length/8)*5-adjustThic/2),new Size(-screwLong-thickness,adjustThic)));
     // a.strokeColor = "#000000"
     let cir1 = new Path.Circle(new Point(xcord+ height/2 - 70/2 + 3.81,y+height/2 - 24/2 + 3),1);
     cir1.strokeColor = "#000000"
@@ -301,8 +312,9 @@ function makeSmallParts(x,y){
     let hingeOuterBrace = Path.Circle(new Point(x,y),12)
     let slot = Path.Rectangle(x-thickness/2,y-tabLength/2,thickness, 12+tabLength/2)
     // slot.strokeColor = "#00ff00"
-    let tab = Path.Rectangle(x-thickness/2,y+8,thickness/8, 4)
-    tab.removeSegment(3)
+    slot.scale(.95)
+    let tab = Path.Rectangle(x-thickness/2,y+8,thickness/1, 4)
+    // tab.removeSegment(3)
     // tab.strokeColor = "#ff0000"
     let tab2 = Path.Rectangle(x+thickness/2,y+8,-thickness/8, 4)
     tab2.removeSegment(3)
@@ -310,7 +322,7 @@ function makeSmallParts(x,y){
     
     hingeOuterBrace = hingeOuterBrace.subtract(slot)
     hingeOuterBrace = hingeOuterBrace.unite(tab)
-    hingeOuterBrace = hingeOuterBrace.unite(tab2)
+    // hingeOuterBrace = hingeOuterBrace.unite(tab2)
     hingeOuterBrace.strokeColor = "#000000"
 
     let hingeOuterBrace2 = hingeOuterBrace.clone()
