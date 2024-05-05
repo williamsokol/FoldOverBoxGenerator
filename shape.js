@@ -182,8 +182,10 @@ function makeSide(x,y){
     cir4.strokeColor = "#000000"
     
     let p = pannel1.bounds  // getting bounds before uniting tabs on
-    makeLivingHinge(p.x, p.y, (p.width-12), p.height)
-
+    let lines = ( makeLivingHinge(p.x, p.y, (p.width-12), p.height))
+    let temp = lines;
+    let nonHinge = new Path()
+        // test.strokeColor = "#009f00"
     //screw holes
 
     screwTracks = new Path();
@@ -192,6 +194,12 @@ function makeSide(x,y){
     screwTracks = screwTracks.unite( Path.Rectangle(pannel1.getPointAt((p.height+p.width/1.33) - adjustThic-.5),new Size(adjustThic,screwLong)));
     screwTracks = screwTracks.unite( Path.Rectangle(pannel1.getPointAt((pannel1.length-p.width/1.33) + adjustThic+.5),new Size(adjustThic,-screwLong)));
     // screwTracks.strokeColor = "#ff0000"
+
+    nonHinge = PaperOffset.offset(screwTracks, 2, { join: 'round' })
+    lines = booleanCompound(lines,nonHinge)
+    lines.strokeColor = "#000000"
+    temp.remove()
+
     pannel1 = pannel1.unite(tabs)
     pannel1 = pannel1.subtract(lidDent)
     pannel1 = pannel1.subtract(screwTracks)
@@ -286,8 +294,8 @@ function makeSide(x,y){
     screwTracks = new Path();
     adjustThic = 2.6 - .4
     
-    screwTracks = screwTracks.unite( Path.Rectangle(pannel4.getPointAt(pannel4.length/8+adjustThic/2),new Size(screwLong+thickness,adjustThic)));
-    screwTracks = screwTracks.unite(new Path.Rectangle(pannel4.getPointAt((pannel4.length/8)*5-adjustThic/2),new Size(-screwLong-thickness,adjustThic)));
+    screwTracks = screwTracks.unite( Path.Rectangle(pannel4.getPointAt(pannel4.length/8+adjustThic/2),new Size(screwLong+1,adjustThic)));
+    screwTracks = screwTracks.unite(new Path.Rectangle(pannel4.getPointAt((pannel4.length/8)*5-adjustThic/2),new Size(-screwLong-1,adjustThic)));
     // a.strokeColor = "#000000"
     let cir1 = new Path.Circle(new Point(xcord+ height/2 - 70/2 + 3.81,y+height/2 - 24/2 + 3),1);
     cir1.strokeColor = "#000000"

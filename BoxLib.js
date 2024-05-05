@@ -55,7 +55,7 @@ window.makeLivingHinge = function(x,y,w,h)
             let bot = Math.min(line+y+yOffset, y+h)
 
             var path2 = new Path.Line(new Point(i*spacing+x,top), new Point(i*spacing+x,bot));
-            path2.strokeColor = '#000000'
+            // path2.strokeColor = '#000000'
             yOffset += gap + line
             path.addChild(path2)
 
@@ -105,6 +105,14 @@ window.makeTabLine = function(x,y,dist,rot = 0){
     var path = new Path.Line(from, to);
     path.rotate(rot,from)
     return path
+}
+
+window.booleanCompound = function( Cpath /*CompoundPath*/, path /*Path*/, operation = 'subtract' /*string*/){
+    var res = new CompoundPath()
+    for (let i=0; i<Cpath.children.length;i++){
+        res.addChild(Cpath.children[i][operation](path, { stroke: true }) );
+    }
+    return res;
 }
 
 // new functions go here v----v
