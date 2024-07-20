@@ -52,8 +52,8 @@ var lenList = [
 var perimeter = lenList.reduce((a, b) => a + b, 0);
 
 
-makeLid(20,30+height)
-makeLid(40+length,30+height)
+makeLid(20,30+height, "L")
+makeLid(40+length,30+height,"R")
 
 makeSide(10+thickness,10)
 
@@ -64,7 +64,7 @@ customSVG.remove()
 
 // process()
 
-function makeLid(x,y){
+function makeLid(x,y,f){
     var finalPaths = [];
     // test = new Path.Rectangle(new Point(x,y+width-20),new Size(95,20))
     // test.strokeColor="#ff0000"
@@ -104,6 +104,23 @@ function makeLid(x,y){
     let test = Path.Rectangle(new Point(x+60-8,y+20),new Size(3,switchSlitLength));
     test = test.rotate(20,new Point(x+60,y+20))
     test.strokeColor = "#000000"
+    // Add text for Switches
+    if(f == "L"){
+
+        var text = new PointText(new Point(x+60-8,y+20));
+        text = text.rotate(20-90,new Point(x+60-10,y+20))
+        text.justification = 'right';
+        text.fillColor = 'black';
+        // text.strokeColor = 'red';
+        text.fontSize = 3;
+        text.content = 'ON/OFF  ON/OFF            ';
+        var text2 = text.clone();
+        text2.position = new Point(x+34,y+53);
+        text2.content = 'power    upload';
+        text2.justification = 'center';
+
+
+    }
 
     // merge the tabs together
     tabs = tabs.unite(tabs2)
