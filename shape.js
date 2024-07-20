@@ -113,10 +113,10 @@ function makeLid(x,y,f){
         text.fillColor = 'black';
         // text.strokeColor = 'red';
         text.fontSize = 3;
-        text.content = 'ON/OFF  ON/OFF            ';
+        text.content = 'OFF/ON  ON/OFF            ';
         var text2 = text.clone();
         text2.position = new Point(x+34,y+53);
-        text2.content = 'power    upload';
+        text2.content = 'upload    power';
         text2.justification = 'center';
 
 
