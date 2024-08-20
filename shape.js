@@ -1,359 +1,134 @@
-const svg = 
-    `<svg
-  
-   id="svg72512"
-   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14)"
-   sodipodi:docname="RobotFrameV2.svg"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  
-   <defs
-   id="defs72509" />
-<g
-   inkscape:label="Layer 1"
-   inkscape:groupmode="layer"
-   id="layer1"
-   transform="translate(-49.072211,-163.54384)">
-  <path
-     id="path76327"
-     style="fill-opacity:0;stroke:#000000"
-     inkscape:transform-center-y="-15.36739"
-     d="m 49.71862,243.64767 c 0,0 -1.491358,-21.5853 5.056298,-44.48511 3.273828,-11.44991 5.817597,-20.84384 10.810957,-27.02618 4.99336,-6.18233 12.436311,-9.15306 25.508506,-7.75656 6.536097,0.69825 9.902529,1.92395 11.557429,3.87093 m 0,0 c 1.6549,1.94699 1.59827,4.61526 1.28824,8.19865 -0.62005,7.16679 -2.25369,17.99408 6.76416,34.03258 18.0357,32.07701 26.07808,33.70471 26.07808,33.70471 m 0,0 -46.765959,-0.53902 H 49.71862"
-     sodipodi:nodetypes="csssccsscccc" />
-</g>
-</svg>`
-const svgGroup = project.importSVG(svg,{insert: true});
-const group = svgGroup.lastChild;
-var customSVG = group.lastChild;
-customSVG.strokeColor= null
+const thickness = 4.8
+const tabLength = 5
 
-const screwThic = 2.3
-const screwLong = 15.8-3
-const switchSlitLength = 50;
-thickness = 3
-tabLength = 10
-width = 130
-length = 140
-height = 70
+// Settings in MM
+const handleHeight = 15
+const width = 290
+const length = 290
+const height = 140
+
+// Logic
+const offset = new Point(height*2+thickness*2,height)
+const LRSizes = new Size(height,width)
+const TBSizes = new Size(length,height)
+const TB_LRSizes = new Size(width/2,height-thickness)
+const handleTemp = new Path.Rectangle(new Rectangle(new Point(0,0), new Size(handleHeight,width/4)),handleHeight/2)
+// handleTemp.strokeColor = "#000000"
+
+var base = new Path.Rectangle(offset,new Size(length,width))
+var baseTabHole1 = new Path.Rectangle(offset+new Point(0,width*1/6),new Size(thickness,width/6))
+var baseTabHole2 = new Path.Rectangle(offset+new Point(0,width*4/6),new Size(thickness,width/6))
+var baseTabHole3 = new Path.Rectangle(offset+new Point(length-thickness,width*4/6),new Size(thickness,width/6))
+var baseTabHole4 = new Path.Rectangle(offset+new Point(length-thickness,width*1/6),new Size(thickness,width/6))
 
 
-let rectangle1 = new Rectangle(new Point(0,0),new Size(length,width));
-customSVG.fitBounds(rectangle1)
+var sideL = new Path.Rectangle(offset-new Point(height,0) ,LRSizes)
+var sideL1_5 = new Path.Rectangle(offset-new Point(height+thickness,0) ,new Size(thickness,LRSizes.height))
+var sideL2 = new Path.Rectangle(offset-new Point(height*2+thickness,0),LRSizes)
+var sideLTab1 = new Path.Rectangle(offset-new Point(height*2+thickness*2,-width*1/6),new Size(thickness,width/6))
+var sideLTab2 = new Path.Rectangle(offset-new Point(height*2+thickness*2,-width*4/6),new Size(thickness,width/6))
+var handleL1 = handleTemp.clone()
+handleL1.position = offset-new Point(height+thickness/2-height/3,-width/2)
+var handleL2 = handleTemp.clone()
+handleL2.position = offset-new Point(height+thickness/2+height/3,-width/2)
 
 
+var sideR = new Path.Rectangle(offset+new Point(length,0),LRSizes)
+var sideR1_5 = new Path.Rectangle(offset+new Point(length+height,0),new Size(thickness,LRSizes.height))
+var sideR2 = new Path.Rectangle(offset+new Point(length+height+thickness,0),LRSizes)
+var sideRTab1 = new Path.Rectangle(offset+new Point(length+height*2+thickness,width*1/6),new Size(thickness,width/6))
+var sideRTab2 = new Path.Rectangle(offset+new Point(length+height*2+thickness,width*4/6),new Size(thickness,width/6))
+var handleR1 = handleTemp.clone()
+handleR1.position = offset+new Point(length+height+thickness/2-height/3,width/2)
+var handleR2 = handleTemp.clone()
+handleR2.position = offset+new Point(length+height+thickness/2+height/3,width/2)
 
-var lenList = [
-    customSVG.children[0].length,
-    customSVG.children[1].length,
-    customSVG.children[2].length
-]
-var perimeter = lenList.reduce((a, b) => a + b, 0);
+var sideT = new Path.Rectangle(offset-new Point(0,height),TBSizes)
+var sideTL = new Path.Rectangle(offset-new Point(TB_LRSizes.width,height),TB_LRSizes)
+var sideTR = new Path.Rectangle(offset-new Point(-TBSizes.width,height),TB_LRSizes)
+
+var sideB = new Path.Rectangle(offset+new Point(0,width),TBSizes)
+var sideBL = new Path.Rectangle(offset-new Point(TB_LRSizes.width,-width-thickness),TB_LRSizes)
+var sideBR = new Path.Rectangle(offset-new Point(-length,-width-thickness),TB_LRSizes)
 
 
-makeLid(20,30+height, "L")
-makeLid(40+length,30+height,"R")
+base2 = base.clone()
+base2.strokeColor = "#000000"
+// base.strokeColor = "#000000"
+// baseTabHole1.strokeColor = "#000000"
+// baseTabHole2.strokeColor = "#000000"
+// baseTabHole3.strokeColor = "#000000"
+// baseTabHole4.strokeColor = "#000000"
+// sideL.strokeColor = "#000000"
+sideL1_5.strokeColor = "#000000"
+// sideL2.strokeColor = "#000000"
+// sideLTab1.strokeColor = "#000000"
+// sideLTab2.strokeColor = "#000000"
+// handleL1.strokeColor = "#000000"
+// handleL2.strokeColor = "#000000"
+// sideR.strokeColor = "#000000"
+sideR1_5.strokeColor = "#000000"
+// sideR2.strokeColor = "#000000"
+// sideRTab1.strokeColor = "#000000"
+// sideRTab2.strokeColor = "#000000"
+// handleR1.strokeColor = "#000000"
+// handleR2.strokeColor = "#000000"
+// sideT.strokeColor = "#000000"
+sideTL.strokeColor = "#000000"
+sideTR.strokeColor = "#000000"
+// sideB.strokeColor = "#000000"
+sideBL.strokeColor = "#000000"
+sideBR.strokeColor = "#000000"
 
-makeSide(10+thickness,10)
+base = base.subtract(baseTabHole1)
+base = base.subtract(baseTabHole2)
+base = base.subtract(baseTabHole3)
+base = base.subtract(baseTabHole4)
+base = base.unite(sideL)
+base = base.unite(sideL1_5)
+base = base.unite(sideL2)
+base = base.unite(sideLTab1)
+base = base.unite(sideLTab2)
+base = base.subtract(handleL1)
+base = base.subtract(handleL2)
+base = base.unite(sideR)
+base = base.unite(sideR1_5)
+base = base.unite(sideR2)
+base = base.unite(sideRTab1)
+base = base.unite(sideRTab2)
+base = base.subtract(handleR1)
+base = base.subtract(handleR2)
+base = base.unite(sideT)
+base = base.unite(sideTR)
+base = base.unite(sideTL)
+base = base.unite(sideB)
+base = base.unite(sideBR)
+base = base.unite(sideBL)
+base.strokeColor = "#ff0000"
 
-makeSmallParts(400,200);
-
-// delete everything not needed
-customSVG.remove()
-
+handleTemp.remove()
 // process()
 
-function makeLid(x,y,f){
-    var finalPaths = [];
-    // test = new Path.Rectangle(new Point(x,y+width-20),new Size(95,20))
-    // test.strokeColor="#ff0000"
-    var path = customSVG.clone()
-    
-    path.position = new Point(x+length/2,y+width/2)
-    finalPaths["botTabLine"] = new Path(path.children[2].segments)
-    finalPaths["leftTabLine"] = new Path(path.children[0].segments)
-    // finalPaths["leftTabLine"].strokeColor = "#ff0000"
-    //indent to free lid tabs
-    let lidIndent  = new Path(path.children[1].segments)
-    lidIndent = PaperOffset.offset(lidIndent, thickness/2, { join: 'round' })
-    let refer  = new Path(path.children[0].segments)
-    refer = PaperOffset.offset(refer, 7, { join: 'round' })
-    lidIndent.insert(0,refer.getPointAt(refer.length-4))
-    lidIndent.segments.unshift(new Segment(lidIndent.bounds.topRight))
-    
-    // create the tabs
-    var tabs = makeTabs(path.children[0],path.children[0].length)
-    
-    //make special hinge tabs here:
-    var tabs2 = makeTabs(path.children[1],path.children[1].length+10)
-    let holeOff = 2
-    let hingeInner = Path.Circle(path.children[1].getPointAt((path.children[1].length-holeOff)),Math.hypot(thickness,tabLength)/2)
-    let hingeOuter = Path.Circle(path.children[1].getPointAt((path.children[1].length-holeOff)),12)
-    hingeInner.strokeColor = "#00000"
-    
-    var tabs3 = makeTabs(path.children[2],path.children[2].length-10,10)
-
-    
-    // mid panel tabs
-    p = makeTabLine(x+60,y+20,switchSlitLength,200)
-    tabs4 = makeTabs(p,switchSlitLength)
-    finalPaths["midPanelTabline"] = p
-    
-    // hole for switch to be see from out side of frame
-    let test = Path.Rectangle(new Point(x+60-8,y+20),new Size(3,switchSlitLength));
-    test = test.rotate(20,new Point(x+60,y+20))
-    test.strokeColor = "#000000"
-    // Add text for Switches
-    if(f == "L"){
-
-        var text = new PointText(new Point(x+60-8,y+20));
-        text = text.rotate(20-90,new Point(x+60-10,y+20))
-        text.justification = 'right';
-        text.fillColor = 'black';
-        // text.strokeColor = 'red';
-        text.fontSize = 3;
-        text.content = 'OFF/ON  ON/OFF            ';
-        var text2 = text.clone();
-        text2.position = new Point(x+34,y+53);
-        text2.content = 'upload    power';
-        text2.justification = 'center';
 
 
-    }
 
-    // merge the tabs together
-    tabs = tabs.unite(tabs2)
-    tabs = tabs.unite(tabs3)
-    tabs = tabs.unite(tabs4)
-    
-    // make connected path
-    var connectedPath =new Path()//path.unite(path)
-    connectedPath = connectedPath.unite(path.children[0])
-    // connectedPath = connectedPath.unite(path.children[1])
-    connectedPath.join(path.children[1])
-    connectedPath.join(path.children[2])
-    connectedPath.fillColor = null
-    // connectedPath.strokeColor = "#000000"
-    
-    //dialate path to be bigger
-    var dilaConnectedPath = PaperOffset.offset(connectedPath, 7, { join: 'round' })
-    dilaConnectedPath.strokeColor = null
 
+function process()
+{
+
+    project.activeLayer.scale(3.779528)
+    // project.activeLayer.scale(2)
+
+    project.activeLayer.position = project.activeLayer.bounds.size/2;
+
+    // myCanvas is an Id made in html doc
+    myCanvas.width = project.activeLayer.bounds.width+100
+    myCanvas.height = project.activeLayer.bounds.height+10
+    
+    
+    
    
-
-
-    dilaConnectedPath = dilaConnectedPath.subtract(lidIndent)
-    dilaConnectedPath = dilaConnectedPath.subtract(tabs)
-    dilaConnectedPath = dilaConnectedPath.unite(hingeOuter)
-
-
-    //MAKE screw holes:
-    let screwholes = [];
-    holepos = finalPaths["midPanelTabline"].getPointAt(finalPaths["midPanelTabline"].length/2)
-    screwholes["midPanel"] = new Path.Circle(holepos,screwThic/2);
-
-    holepos = finalPaths["leftTabLine"].getPointAt(finalPaths["leftTabLine"].length/8)
-    screwholes["leftTabLine1"] = new Path.Circle(holepos,screwThic/2);
-
-    holepos = finalPaths["leftTabLine"].getPointAt(finalPaths["leftTabLine"].length/1.33)
-    screwholes["leftTabLine2"] = new Path.Circle(holepos,screwThic/2);
-
-    holepos = finalPaths["botTabLine"].getPointAt(finalPaths["botTabLine"].length/4)
-    screwholes["botRight"] = new Path.Circle(holepos,screwThic/2);
-    makeMotorMount(x+21-8,y+88)
-    
-    
-    
-    // finalPaths["midPanelTabline"].strokeColor = "#ff0000"
-    // finalPaths["botTabLine"].strokeColor = "#ff0000"
-    console.log(finalPaths["botTabLine"].length)
-
-    for(var key in screwholes) {
-        screwholes[key].strokeColor = "#000000"
-    };
-    dilaConnectedPath.strokeColor = "#000000"
-    //delete everything not needed
-    path.remove()
-    return finalPaths
-}
-function makeSide(x,y){
-    let adjustThic = screwThic
-    let rectangle1 = new Path.Rectangle(new Point(x,y),new Size(perimeter,height));
-    let path = rectangle1
-    
-    //let lenList = [length-(thickness*2),width,length -(thickness*2),width]
-    let xcord = x;
-    // make pannel 1
-    let pannel1 = new Path.Rectangle(new Point(xcord,y),new Size(lenList[0],height));
-    let tabs = new Path();
-    tabs = tabs.unite(makeTabs(pannel1, lenList[0], height,thickness/2))
-    tabs = tabs.unite(makeTabs(pannel1, lenList[0], 2*height+lenList[0],thickness/2))
-
-    
-    let extension = new Path.Rectangle(pannel1.bounds.topRight,new Size(2,height));
-    pannel1 = pannel1.unite(extension)
-    
-    let lidDent = (makeTabs(pannel1, height/2, (height+pannel1.bounds.width)+height/4,-thickness/2))
-    let cir4 = new Path.Circle(new Point(x+95,y+height/2),height/4);
-    cir4.strokeColor = "#000000"
-    
-    let p = pannel1.bounds  // getting bounds before uniting tabs on
-    let lines = ( makeLivingHinge(p.x, p.y, (p.width-12), p.height))
-    let temp = lines;
-    let nonHinge = new Path()
-        // test.strokeColor = "#009f00"
-    //screw holes
-
-    screwTracks = new Path();
-    screwTracks = screwTracks.unite( Path.Rectangle(pannel1.getPointAt((p.height+p.width/8) - adjustThic/2),new Size(adjustThic,screwLong)));
-    screwTracks = screwTracks.unite( Path.Rectangle(pannel1.getPointAt((pannel1.length-p.width/8) + adjustThic/2),new Size(adjustThic,-screwLong)));
-    screwTracks = screwTracks.unite( Path.Rectangle(pannel1.getPointAt((p.height+p.width/1.33) - adjustThic-.5),new Size(adjustThic,screwLong)));
-    screwTracks = screwTracks.unite( Path.Rectangle(pannel1.getPointAt((pannel1.length-p.width/1.33) + adjustThic+.5),new Size(adjustThic,-screwLong)));
-    // screwTracks.strokeColor = "#ff0000"
-
-    nonHinge = PaperOffset.offset(screwTracks, 2, { join: 'round' })
-    lines = booleanCompound(lines,nonHinge)
-    lines.strokeColor = "#000000"
-    temp.remove()
-
-    pannel1 = pannel1.unite(tabs)
-    pannel1 = pannel1.subtract(lidDent)
-    pannel1 = pannel1.subtract(screwTracks)
-    pannel1.strokeColor="#000000"
-    
-    xcord += lenList[0]+ 10
-     // make pannel 2
-
-    let offset = 3
-    let pannel2 = new Path.Rectangle(new Point(xcord,y),new Size(lenList[1]+offset,height));
-    console.log(pannel2.length);
-    let tabs2 = new Path();
-    tabs2 = tabs2.unite(makeTabs(pannel2, lenList[1]+10, height-0,thickness/2))
-    tabs2 = tabs2.unite(makeTabs(pannel2, lenList[1]+10,pannel2.length- (lenList[1]+10-0),thickness/2))
-    //2*height+lenList[1]+(2*offset-10)-1
-    let lidTab = (makeTabs(pannel2, height/2, height/4,+thickness/2))
-
-    
-    hingeTracks = Path.Rectangle(new Point(xcord+lenList[1]+offset-12-tabLength/2,y),new Size(4,thickness));
-    hingeTracks = hingeTracks.unite( Path.Rectangle(new Point(xcord+lenList[1]+offset-12-tabLength/2,y+height-thickness),new Size(4,thickness)));
-    // hingeTracks.strokeColor = "#ff0000"
-    let nub = Path.Circle(new Point(xcord+lenList[1]-2.5,y-2), tabLength/3)
-    nub = nub.unite(Path.Circle(new Point(xcord+lenList[1]-2.5,y+height+2), tabLength/3))
-    // nub.strokeColor = "#ff0000"
-
-    let p2 = pannel2.bounds
-    makeLivingHinge(p2.x+1, p2.y, (p2.width-12), p2.height)
-    pannel2 = pannel2.unite(tabs2)
-    pannel2 = pannel2.unite(lidTab)
-    pannel2 = pannel2.subtract(hingeTracks)
-    pannel2 = pannel2.unite(nub)
-
-    pannel2.strokeColor="#000000"
-    
-    xcord += lenList[1]+ 10
-    // make pannel 3
-    offset = 0
-    let pannel3 = new Path.Rectangle(new Point(xcord,y),new Size(lenList[2],height));
-    let tabs3 = new Path();
-    tabs3 = tabs3.unite(makeTabs(pannel3, lenList[2]-10, (height),thickness/2))
-    tabs3 = tabs3.unite(makeTabs(pannel3, lenList[2]-10,2*height+lenList[2]-(-10),thickness/2))
-    
-    // trim edge to fit shape
-    let pannel3_1 = new Path.Rectangle(new Point(xcord,y),new Size(thickness/2,height));
-    let pannel3_2 = new Path.Rectangle(new Point(xcord+lenList[2]-8,y),new Size(8,height));
-    
-    //indent in the bottom pannel for hinge braces
-    hingeTracks = Path.Rectangle(new Point(xcord+lenList[2]-8,y),new Size(-12/2,thickness));
-    hingeTracks = hingeTracks.unite( Path.Rectangle(new Point(xcord+lenList[2]-8,y+height-thickness),new Size(-12/2,thickness)));
-    // hingeTracks.strokeColor = "#ff0000"
-    
-    //screw holes
-    screwTracks = new Path();
-    let screwThic3 = 2.3/2
-    a = pannel3.getBounds()
-
-    console.log(a.size.width)
-    
-    screwTracks = screwTracks.unite( Path.Rectangle(pannel3.getPointAt(height+(a.size.width*3/4)-(adjustThic/2)),new Size(adjustThic,screwLong)));
-    screwTracks = screwTracks.unite( Path.Rectangle(pannel3.getPointAt(pannel3.length-(a.size.width*3/4)+(adjustThic/2)),new Size(adjustThic,-screwLong)));
-    screwTracks = screwTracks.unite( Path.Circle(new Point(xcord+lenList[2]-8-5,y+height/2-12), screwThic3 ));
-    screwTracks = screwTracks.unite( Path.Circle(new Point(xcord+lenList[2]-8-5,y+height/2+12), screwThic3 ));
-    screwTracks = screwTracks.unite( Path.Circle(new Point(xcord+lenList[2]-8-5-29.5,y+height/2-12), screwThic3 ));
-    screwTracks = screwTracks.unite( Path.Circle(new Point(xcord+lenList[2]-8-5-29.5,y+height/2+12), screwThic3 ));
-    // screwTracks = screwTracks.unite( Path.Rectangle(pannel3.getPointAt(pannel3.length-(a.size.width*3/4)+(adjustThic/2)),new Size(adjustThic,-screwLong)));
-    //screwTracks = screwTracks.unite(new Path.Rectangle(pannel4.getPointAt((pannel4.length/8)*5-screwThic/2),new Size(-screwLong,screwThic)));
-    // screwTracks.strokeColor = "#ff0000"
-    pannel3 = pannel3.subtract(pannel3_1)
-    pannel3 = pannel3.subtract(pannel3_2)
-    pannel3 = pannel3.unite(tabs3)
-    pannel3 = pannel3.subtract(hingeTracks)
-    pannel3 = pannel3.subtract(screwTracks)
-
-    
-    xcord += lenList[2]+ 10
-    pannel3.strokeColor="#000000"
-
-    // make pannel 4
-    offset = 8
-    let pannel4 = new Path.Rectangle(new Point(xcord,y),new Size(height,height));
-    let tabs4 = new Path();
-    tabs4 = tabs4.unite(makeTabs(pannel4, switchSlitLength, height/2-switchSlitLength/2,thickness/2))
-    tabs4 = tabs4.unite(makeTabs(pannel4, switchSlitLength, (height*2.5)-switchSlitLength/2,thickness/2))
-    
-    // make wire indent
-    indentW = 40
-    let indent = Path.Rectangle(new Point(xcord+height/2-indentW/2,y),new Size(indentW,height/2- 24/2))
-    indent = indent.unite(Path.Rectangle(new Point(xcord,y+10),new Size(6,6)))
-    // indent.strokeColor = "#ff0000"
-
-        //screw holes
-    screwTracks = new Path();
-    adjustThic = 2.6 - .4
-    
-    screwTracks = screwTracks.unite( Path.Rectangle(pannel4.getPointAt(pannel4.length/8+adjustThic/2),new Size(screwLong+1,adjustThic)));
-    screwTracks = screwTracks.unite(new Path.Rectangle(pannel4.getPointAt((pannel4.length/8)*5-adjustThic/2),new Size(-screwLong-1,adjustThic)));
-    // a.strokeColor = "#000000"
-    let cir1 = new Path.Circle(new Point(xcord+ height/2 - 70/2 + 3.81,y+height/2 - 24/2 + 3),1);
-    cir1.strokeColor = "#000000"
-    let cir2 = new Path.Circle(new Point(xcord+ height/2 - 70/2+ 57,y+height/2 - 24/2 + 9),1);
-    cir2.strokeColor = "#000000"
-
-
-
-    //  tabs4 = tabs4.unite(makeTabs(pannel4, lenList[2]-10,2*height+lenList[2]-(2*offset-10),thickness/2))
-    pannel4 = pannel4.unite(tabs4)
-    pannel4 = pannel4.subtract(indent)
-    pannel4 = pannel4.subtract(screwTracks)
-     
- 
-    pannel4.strokeColor="#000000"
-    
-
-}
-
-
-function makeSmallParts(x,y){
-    let hingeOuterBrace = Path.Circle(new Point(x,y),12)
-    let slot = Path.Rectangle(x-thickness/2,y-tabLength/2,thickness, 12+tabLength/2)
-    // slot.strokeColor = "#00ff00"
-    slot.scale(.95)
-    let tab = Path.Rectangle(x-thickness/2,y+8,thickness/1, 4)
-    // tab.removeSegment(3)
-    // tab.strokeColor = "#ff0000"
-    let tab2 = Path.Rectangle(x+thickness/2,y+8,-thickness/8, 4)
-    tab2.removeSegment(3)
-    // tab2.strokeColor = "#ff0000"
-    
-    hingeOuterBrace = hingeOuterBrace.subtract(slot)
-    hingeOuterBrace = hingeOuterBrace.unite(tab)
-    // hingeOuterBrace = hingeOuterBrace.unite(tab2)
-    hingeOuterBrace.strokeColor = "#000000"
-
-    let hingeOuterBrace2 = hingeOuterBrace.clone()
-    hingeOuterBrace2.position = new Point(x+30,y)
-    // hingeOuterBrace2.position = new Point(319,y+30)
-    // hingeOuterBrace2.rotate(135)
-    
-
+    // downloadAsSVG()
+    // console.log(project.exportSVG())
+    // rect.strokeColor = "#000000"
 }

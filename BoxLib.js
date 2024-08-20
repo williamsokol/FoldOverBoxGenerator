@@ -5,12 +5,17 @@ window.width = 130
 window.length = 140
 window.height = 60
 
-
+window.MMToInches = function(mm){
+    return mm * 0.0393701
+}
+window.InchesToMM = function(inch){
+    return inch * 25.4
+}
 window.makeTabs = function(shapePath,length, start=0, dist=0)
 {
 
 
-    var tabPath = new Path()
+    var tabPath = new CompoundPath()
 
     let tabPos = 0;
     
@@ -26,7 +31,7 @@ window.makeTabs = function(shapePath,length, start=0, dist=0)
         tab.position = offsetPoint + (norm*dist)
         
         // console.log("test: " + norm*dist +" "+ j)
-        tabPath = tabPath.unite(tab)
+        tabPath.addChild(tab)
     }
     // tabPath.strokeColor = "#00ff00"
     return tabPath;
@@ -74,9 +79,9 @@ window.makeMotorMount = function (x,y)
  
     // main area box
     let rectangle1 = new Path.Rectangle(new Point(x,y),new Size(mmL,mmW));
-    rectangle1 = rectangle1.scale(1.1)
-    rectangle1.strokeColor = "#ff0000"
-    rectangle1.remove()
+    rectangle1 = rectangle1.scale(1.01)
+    // rectangle1.strokeColor = "#000000"
+    // rectangle1.remove()
     
     // motor hole 
     let cir = new Path.Circle(new Point(x+mmL/2,y+14.1),mmL/2);
@@ -89,14 +94,16 @@ window.makeMotorMount = function (x,y)
     
     cir = cir.unite(cir2)
     cir = cir.unite(cir3)
-    cir.strokeColor = "#000000"
+    // cir.strokeColor = "#000000"
     
      // mount screw hole 1
     let cir4 = new Path.Circle(new Point(x+mmL/2-(17.8/2),y+mmW-2.6),1.5);
-    cir4.strokeColor = "#000000"
+    // cir4.strokeColor = "#000000"
     // mount screw hole 2
     let cir5 = new Path.Circle(new Point(x+mmL/2+(17.8/2),y+mmW-2.6),1.5);
-    cir5.strokeColor = "#000000"
+    // cir5.strokeColor = "#000000"
+
+    return rectangle1
 }
 
 window.makeTabLine = function(x,y,dist,rot = 0){
