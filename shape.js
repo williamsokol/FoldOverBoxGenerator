@@ -48,54 +48,54 @@ var sideT = new Path.Rectangle(offset-new Point(-thickness,height),TBSizes)
 var sideTL = new Path.Rectangle(offset-new Point(TB_LRSizes.width-thickness,height),TB_LRSizes)
 var sideTR = new Path.Rectangle(offset-new Point(-TBSizes.width-thickness,height),TB_LRSizes)
 var handleTL = handleTemp2.clone()
-handleTL.position = offset-new Point(TB_LRSizes.width-thickness,thickness/2+height * 2/3)
+handleTL.position = offset-new Point(TB_LRSizes.width-thickness,thickness+height * 2/3)
 handleTL.rotate(90)
 // handleTL.scale(1.5)
 var handleTR = handleTemp2.clone()
-handleTR.position = offset-new Point(-TBSizes.width-TB_LRSizes.width-thickness,thickness/2+height * 2/3)
+handleTR.position = offset-new Point(-TBSizes.width-TB_LRSizes.width-thickness,thickness+height * 2/3)
 handleTR.rotate(90)
 // handleTR.scale(1.5)
 var sideB = new Path.Rectangle(offset+new Point(thickness,width),TBSizes)
 var sideBL = new Path.Rectangle(offset-new Point(TB_LRSizes.width-thickness,-width-thickness),TB_LRSizes)
 var sideBR = new Path.Rectangle(offset-new Point(-length+thickness,-width-thickness),TB_LRSizes)
 var handleBL = handleTemp2.clone()
-handleBL.position = offset-new Point(TB_LRSizes.width-thickness,-width-thickness/2-height* 2/3)
+handleBL.position = offset-new Point(TB_LRSizes.width-thickness,-width-thickness-height* 2/3)
 handleBL.rotate(90)
 // handleBL.scale(1.5)
 var handleBR = handleTemp2.clone()
-handleBR.position = offset-new Point(-TBSizes.width-TB_LRSizes.width-thickness,-width-thickness/2-height* 2/3)
+handleBR.position = offset-new Point(-TBSizes.width-TB_LRSizes.width-thickness,-width-thickness-height* 2/3)
 handleBR.rotate(90)
 // handleBR.scale(1.5)
 
 base2 = base.clone()
-base2.strokeColor = "#000000"
+// base2.strokeColor = "#000000"
 // base.strokeColor = "#000000"
 // baseTabHole1.strokeColor = "#000000"
 // baseTabHole2.strokeColor = "#000000"
 // baseTabHole3.strokeColor = "#000000"
 // baseTabHole4.strokeColor = "#000000"
 // sideL.strokeColor = "#000000"
-sideL1_5.strokeColor = "#000000"
+// sideL1_5.strokeColor = "#000000"
 // sideL2.strokeColor = "#000000"
 // sideLTab1.strokeColor = "#000000"
 // sideLTab2.strokeColor = "#000000"
 // handleL1.strokeColor = "#000000"
 // handleL2.strokeColor = "#000000"
 // sideR.strokeColor = "#000000"
-sideR1_5.strokeColor = "#000000"
+// sideR1_5.strokeColor = "#000000"
 // sideR2.strokeColor = "#000000"
 // sideRTab1.strokeColor = "#000000"
 // sideRTab2.strokeColor = "#000000"
 // handleR1.strokeColor = "#000000"
 // handleR2.strokeColor = "#000000"
 // sideT.strokeColor = "#000000"
-sideTL.strokeColor = "#000000"
-sideTR.strokeColor = "#000000"
+// sideTL.strokeColor = "#000000"
+// sideTR.strokeColor = "#000000"
 // handleTL.strokeColor = "#000000"
 // handleTR.strokeColor = "#000000"
 // sideB.strokeColor = "#000000"
-sideBL.strokeColor = "#000000"
-sideBR.strokeColor = "#000000"
+// sideBL.strokeColor = "#000000"
+// sideBR.strokeColor = "#000000"
 // handleBL.strokeColor = "#000000"
 // handleBR.strokeColor = "#000000"
 
@@ -131,10 +131,57 @@ base = base.subtract(handleBR)
 base.strokeColor = "#ff0000"
 
 handleTemp.remove()
+
+var base2D = dashPath(base2)
+var sideL1_5D = dashPath(sideL1_5) 
+var sideR1_5D = dashPath(sideR1_5)
+var sideTLD = dashPath(sideTL)
+var sideTRD = dashPath(sideTR)
+var sideBLD = dashPath(sideBL)
+var sideBRD = dashPath(sideBR)
+
+base2D.strokeColor = "#ff0000"
+sideL1_5D.strokeColor = "#ff0000"
+sideR1_5D.strokeColor = "#ff0000"
+sideTLD.strokeColor = "#ff0000"
+sideTRD.strokeColor = "#ff0000"
+sideBLD.strokeColor = "#ff0000"
+sideBRD.strokeColor = "#ff0000"
 // process()
 
 
 
+
+function dashPath(path){
+    console.log(path.segments)
+    const dashline = 5
+    const dashgap = 4  
+    var dashPos = dashgap
+    compoundPath = new CompoundPath()
+    while (path.length > dashPos+5){
+        
+        var skip = false
+        path.segments.forEach(s => {
+            
+            // console.log(path.getOffsetOf(s.point))
+            if(dashPos-dashgap/2 < path.getOffsetOf(s.point) && dashPos+dashline+dashgap/2 > path.getOffsetOf(s.point)){
+                skip = true
+            }
+        });
+        
+        var segments = [path.getPointAt(dashPos), path.getPointAt(dashPos+dashline)];
+        dashPos += dashline + dashgap
+        
+
+        if(skip){ continue }
+        
+
+        var p = new Path(segments);
+        compoundPath.addChild(new Path(p.segments))
+    }
+    // compoundPath.selected = true
+    return compoundPath
+}
 
 
 function process()
