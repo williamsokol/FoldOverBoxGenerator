@@ -3,9 +3,9 @@ const tabLength = 5
 
 // Settings in MM
 const handleHeight = 15
-const width = 290
-const length = 290
-const height = 140
+const width = 100
+const length = 100+thickness*2
+const height = 100
 
 // Logic
 const offset = new Point(height*2+thickness*2,height)
@@ -16,10 +16,10 @@ const handleTemp = new Path.Rectangle(new Rectangle(new Point(0,0), new Size(han
 // handleTemp.strokeColor = "#000000"
 
 var base = new Path.Rectangle(offset,new Size(length,width))
-var baseTabHole1 = new Path.Rectangle(offset+new Point(0,width*1/6),new Size(thickness,width/6))
-var baseTabHole2 = new Path.Rectangle(offset+new Point(0,width*4/6),new Size(thickness,width/6))
-var baseTabHole3 = new Path.Rectangle(offset+new Point(length-thickness,width*4/6),new Size(thickness,width/6))
-var baseTabHole4 = new Path.Rectangle(offset+new Point(length-thickness,width*1/6),new Size(thickness,width/6))
+var baseTabHole1 = new Path.Rectangle(offset+new Point(thickness,width*1/6),new Size(thickness,width/6))
+var baseTabHole2 = new Path.Rectangle(offset+new Point(thickness,width*4/6),new Size(thickness,width/6))
+var baseTabHole3 = new Path.Rectangle(offset+new Point(length-thickness*2,width*4/6),new Size(thickness,width/6))
+var baseTabHole4 = new Path.Rectangle(offset+new Point(length-thickness*2,width*1/6),new Size(thickness,width/6))
 
 
 var sideL = new Path.Rectangle(offset-new Point(height,0) ,LRSizes)
@@ -46,11 +46,22 @@ handleR2.position = offset+new Point(length+height+thickness/2+height/3,width/2)
 var sideT = new Path.Rectangle(offset-new Point(0,height),TBSizes)
 var sideTL = new Path.Rectangle(offset-new Point(TB_LRSizes.width,height),TB_LRSizes)
 var sideTR = new Path.Rectangle(offset-new Point(-TBSizes.width,height),TB_LRSizes)
+var handleTL = handleTemp.clone()
+handleTL.position = offset-new Point(TB_LRSizes.width,thickness/2+height * 2/3)
+handleTL.rotate(90)
+var handleTR = handleTemp.clone()
+handleTR.position = offset-new Point(-TBSizes.width-TB_LRSizes.width,thickness/2+height * 2/3)
+handleTR.rotate(90)
 
 var sideB = new Path.Rectangle(offset+new Point(0,width),TBSizes)
 var sideBL = new Path.Rectangle(offset-new Point(TB_LRSizes.width,-width-thickness),TB_LRSizes)
 var sideBR = new Path.Rectangle(offset-new Point(-length,-width-thickness),TB_LRSizes)
-
+var handleBL = handleTemp.clone()
+handleBL.position = offset-new Point(TB_LRSizes.width,-width-thickness/2-height* 2/3)
+handleBL.rotate(90)
+var handleBR = handleTemp.clone()
+handleBR.position = offset-new Point(-TBSizes.width-TB_LRSizes.width,-width-thickness/2-height* 2/3)
+handleBR.rotate(90)
 
 base2 = base.clone()
 base2.strokeColor = "#000000"
@@ -76,9 +87,14 @@ sideR1_5.strokeColor = "#000000"
 // sideT.strokeColor = "#000000"
 sideTL.strokeColor = "#000000"
 sideTR.strokeColor = "#000000"
+// handleTL.strokeColor = "#000000"
+// handleTR.strokeColor = "#000000"
 // sideB.strokeColor = "#000000"
 sideBL.strokeColor = "#000000"
 sideBR.strokeColor = "#000000"
+// handleBL.strokeColor = "#000000"
+// handleBR.strokeColor = "#000000"
+
 
 base = base.subtract(baseTabHole1)
 base = base.subtract(baseTabHole2)
@@ -101,9 +117,13 @@ base = base.subtract(handleR2)
 base = base.unite(sideT)
 base = base.unite(sideTR)
 base = base.unite(sideTL)
+base = base.subtract(handleTL)
+base = base.subtract(handleTR)
 base = base.unite(sideB)
 base = base.unite(sideBR)
 base = base.unite(sideBL)
+base = base.subtract(handleBL)
+base = base.subtract(handleBR)
 base.strokeColor = "#ff0000"
 
 handleTemp.remove()
