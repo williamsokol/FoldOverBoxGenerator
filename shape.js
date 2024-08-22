@@ -1,12 +1,79 @@
-const thickness = 4.8
+var thickness = 4.8
 const tabLength = 5
 
 // Settings in MM
 const handleHeight = 15
-const width = 100
-const length = 100+thickness*2
-const height = 100
+var width = 100
+var length = 100+thickness*2
+var height = 100
 
+
+
+
+
+
+// const thicknessInput = document.getElementById('thickness');
+// thicknessInput.addEventListener('change', (event) => {
+//     event.preventDefault();
+//     console.log(`Thickness changed to: ${event.target.value}`);
+//     thickness = parseFloat(event.target.value) 
+//     start()
+    
+// });
+// const lengthInput = document.getElementById('length');
+// lengthInput.addEventListener('change', (event) => {
+//   console.log(`Thickness changed to: ${event.target.value}`);
+//   length = parseFloat(event.target.value) 
+//   start()
+// });
+// const widthInput = document.getElementById('width');
+// widthInput.addEventListener('change', (event) => {
+//   console.log(`Thickness changed to: ${event.target.value}`);
+//   width = parseFloat(event.target.value) 
+//   start()
+// });
+// const heightInput = document.getElementById('height');
+// heightInput.addEventListener('change', (event) => {
+//   console.log(`Thickness changed to: ${event.target.value}`);
+//   height = parseFloat(event.target.value) 
+//   start()
+// });
+const form = document.querySelector('form');
+
+
+form.addEventListener('submit', (event) => {
+    event.preventDefault(); // Prevent the form from submitting normally
+    
+    thickness = parseFloat(document.getElementById('thickness').value)
+    length = parseFloat(document.getElementById('length').value)
+    width = parseFloat(document.getElementById('width').value)
+    height = parseFloat(document.getElementById('height').value)
+
+    length = clamp(length,30,1000)
+    width = clamp(width,30,1000)
+    height = clamp(height,50,1000)
+
+    document.getElementById('thickness').value = thickness
+    document.getElementById('length').value = length
+    document.getElementById('width').value = width
+    document.getElementById('height').value = height
+
+    // console.log(event.submitter.value)
+    if(event.submitter.value == "Export"){
+        start()
+        window.process()
+    }
+    start()
+});
+
+
+
+
+// form.dispatchEvent("submit")
+start()
+function start(){
+
+project.clear()
 // Logic
 const offset = new Point(height*2+thickness*2,height)
 const LRSizes = new Size(height,width)
@@ -147,6 +214,7 @@ sideTLD.strokeColor = "#ff0000"
 sideTRD.strokeColor = "#ff0000"
 sideBLD.strokeColor = "#ff0000"
 sideBRD.strokeColor = "#ff0000"
+}
 // process()
 
 
@@ -202,4 +270,8 @@ function process()
     // downloadAsSVG()
     // console.log(project.exportSVG())
     // rect.strokeColor = "#000000"
+}
+
+function clamp(number, min, max) {
+    return Math.max(min, Math.min(number, max));
 }
