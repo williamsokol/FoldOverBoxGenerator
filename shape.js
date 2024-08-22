@@ -10,35 +10,8 @@ var height = 100
 
 
 
-
-
-// const thicknessInput = document.getElementById('thickness');
-// thicknessInput.addEventListener('change', (event) => {
-//     event.preventDefault();
-//     console.log(`Thickness changed to: ${event.target.value}`);
-//     thickness = parseFloat(event.target.value) 
-//     start()
-    
-// });
-// const lengthInput = document.getElementById('length');
-// lengthInput.addEventListener('change', (event) => {
-//   console.log(`Thickness changed to: ${event.target.value}`);
-//   length = parseFloat(event.target.value) 
-//   start()
-// });
-// const widthInput = document.getElementById('width');
-// widthInput.addEventListener('change', (event) => {
-//   console.log(`Thickness changed to: ${event.target.value}`);
-//   width = parseFloat(event.target.value) 
-//   start()
-// });
-// const heightInput = document.getElementById('height');
-// heightInput.addEventListener('change', (event) => {
-//   console.log(`Thickness changed to: ${event.target.value}`);
-//   height = parseFloat(event.target.value) 
-//   start()
-// });
 const form = document.querySelector('form');
+form.reset(); 
 
 
 form.addEventListener('submit', (event) => {
@@ -58,6 +31,9 @@ form.addEventListener('submit', (event) => {
     document.getElementById('width').value = width
     document.getElementById('height').value = height
 
+
+    document.getElementById('myCanvas').width = height*2+thickness*2+length+height*2+thickness*2
+    document.getElementById('myCanvas').height = height+height+width
     // console.log(event.submitter.value)
     if(event.submitter.value == "Export"){
         start()

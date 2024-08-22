@@ -1,6 +1,15 @@
 <html>
   <head>
-    <title>Demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta property="og:url"                content="https://williamsokol.github.io/" />
+    <meta property="og:type"               content="article" />
+    <meta property="og:title"              content="Box Generator" />
+    <meta property="og:description"        content="This was something I made out for convenience because I was having trouble finding a good box partition for my BallyBot robot kit " />
+    <meta property="og:image"              content="https://i.imgur.com/UeYw8tC.jpeg" />
+
+
+    <title>Box Generator</title>
     <!-- Load latest acron version first -->
     <script type="text/javascript" src="https://unpkg.com/acorn"></script>
     <!-- Then load Paper.js -->
@@ -8,21 +17,31 @@
     <!-- <script type="text/javascript" src="./demo.js"></script> -->
     <script type="text/paperscript" src="BoxLib.js" canvas="myCanvas"></script>
     <script type="text/paperscript" src="shape.js" canvas="myCanvas"></script>
+
   </head>
   <body>
+    <h1 style="text-align: center;"> Fold Over Box Generator</h1>
     <form action="/action_page.php">
       <label for="thickness">Material Thickness (mm):</label><br>
       <input type="text" id="thickness" name="fname" value="4.8"><br>
       <label for="length">Length (mm):</label><br>
-      <input type="text" id="length" name="fname" value="110"><br>
+      <input type="text" id="length" name="fname" value="100"><br>
       <label for="width">Width (mm):</label><br>
-      <input type="text" id="width" name="fname" value="70"><br>
+      <input type="text" id="width" name="fname" value="100"><br>
       <label for="height">Height (mm):</label><br>
-      <input type="text" id="height" name="lname" value="30"><br><br>
+      <input type="text" id="height" name="lname" value="100"><br><br>
       <input type="submit" value="Update">
       <input type="submit" value="Export">
     </form> 
     
-    <canvas id="myCanvas" width="1200" height="768"></canvas>
+    <canvas id="myCanvas" width="1200" height="500"></canvas>
+
+
+    <img src="PXL_20240822_020253746.MP.jpg" width="50%">
+    <p>This is a little website to generate boxes for lasercutting,<br> after having trouble finding a good alternative</p>
+
+    By: William Sokol
+    <br>
+    Aug 21, 2024
   </body>
 </html>
