@@ -17,14 +17,14 @@ const handleTemp2 = new Path.Rectangle(new Rectangle(new Point(0,0), new Size(ha
 // handleTemp.strokeColor = "#000000"
 
 var base = new Path.Rectangle(offset,new Size(length,width))
-var baseTabHole1 = new Path.Rectangle(offset+new Point(thickness,width*1/6),new Size(thickness,width/6))
-var baseTabHole2 = new Path.Rectangle(offset+new Point(thickness,width*4/6),new Size(thickness,width/6))
-var baseTabHole3 = new Path.Rectangle(offset+new Point(length-thickness*2,width*4/6),new Size(thickness,width/6))
-var baseTabHole4 = new Path.Rectangle(offset+new Point(length-thickness*2,width*1/6),new Size(thickness,width/6))
+var baseTabHole1 = new Path.Rectangle(offset+new Point(0,width*1/6),new Size(thickness*2,width/6))
+var baseTabHole2 = new Path.Rectangle(offset+new Point(0,width*4/6),new Size(thickness*2,width/6))
+var baseTabHole3 = new Path.Rectangle(offset+new Point(length-thickness*2,width*4/6),new Size(thickness*2,width/6))
+var baseTabHole4 = new Path.Rectangle(offset+new Point(length-thickness*2,width*1/6),new Size(thickness*2,width/6))
 
 
 var sideL = new Path.Rectangle(offset-new Point(height,0) ,LRSizes)
-var sideL1_5 = new Path.Rectangle(offset-new Point(height+thickness,0) ,new Size(thickness,LRSizes.height))
+var sideL1_5 = new Path.Rectangle(offset-new Point(height+thickness,0) ,new Size(thickness*1.5,LRSizes.height))
 var sideL2 = new Path.Rectangle(offset-new Point(height*2+thickness,0),LRSizes)
 var sideLTab1 = new Path.Rectangle(offset-new Point(height*2+thickness*2,-width*1/6),new Size(thickness,width/6))
 var sideLTab2 = new Path.Rectangle(offset-new Point(height*2+thickness*2,-width*4/6),new Size(thickness,width/6))
@@ -35,7 +35,7 @@ handleL2.position = offset-new Point(height+thickness/2+height/3,-width/2)
 
 
 var sideR = new Path.Rectangle(offset+new Point(length,0),LRSizes)
-var sideR1_5 = new Path.Rectangle(offset+new Point(length+height,0),new Size(thickness,LRSizes.height))
+var sideR1_5 = new Path.Rectangle(offset+new Point(length+height,0),new Size(thickness*1.5,LRSizes.height))
 var sideR2 = new Path.Rectangle(offset+new Point(length+height+thickness,0),LRSizes)
 var sideRTab1 = new Path.Rectangle(offset+new Point(length+height*2+thickness,width*1/6),new Size(thickness,width/6))
 var sideRTab2 = new Path.Rectangle(offset+new Point(length+height*2+thickness,width*4/6),new Size(thickness,width/6))
@@ -153,12 +153,12 @@ sideBRD.strokeColor = "#ff0000"
 
 
 function dashPath(path){
-    console.log(path.segments)
-    const dashline = 5
-    const dashgap = 4  
+    // console.log(path.segments)
+    const dashline = 8
+    const dashgap = 7
     var dashPos = dashgap
     compoundPath = new CompoundPath()
-    while (path.length > dashPos+5){
+    while (path.length > dashPos+8){
         
         var skip = false
         path.segments.forEach(s => {
